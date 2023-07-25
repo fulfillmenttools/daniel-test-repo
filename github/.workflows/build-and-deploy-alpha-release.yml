@@ -1,0 +1,14 @@
+# Comment
+
+name: "Build & deploy alpha release"
+
+on:
+  workflow_dispatch: { }
+
+jobs:
+  build:
+    runs-on: buildjet-8vcpu-ubuntu-2004
+
+    steps:
+      - name: Sourcecode Checkout
+        uses: actions/checkout@v3
