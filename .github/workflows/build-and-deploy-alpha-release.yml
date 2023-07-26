@@ -4,8 +4,11 @@ name: "Build & deploy alpha release"
 
 on:
   workflow_dispatch:
-    branches:
-      - "release/**"
+    inputs:
+      release_branch_name:
+        description: 'Release branch name'
+        required: true
+        type: string
 
 jobs:
   build:
@@ -14,3 +17,5 @@ jobs:
     steps:
       - name: Sourcecode Checkout
         uses: actions/checkout@v3
+        run: |
+          echo  "The release branch are ${{ inputs.release_branch_name }}" 
