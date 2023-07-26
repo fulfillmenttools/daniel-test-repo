@@ -4,22 +4,17 @@ name: "Build & deploy alpha release"
 
 on:
   workflow_dispatch:
-    inputs:
-      release_branch_name:
-        description: 'Release branch name'
-        required: true
-        type: string
 
 jobs:
   build:
     runs-on: buildjet-8vcpu-ubuntu-2004
 
     steps:
-      - name: Print Release Branch Name
+      - name: Print Branch Name
         run: |
-          echo The release branch are ${{ inputs.release_branch_name }}
-          echo The release branch are ${GITHUB_REF}
-          echo The release branch are ${GITHUB_HEAD_REF}
+          echo The branch are ${GITHUB_REF}
+          echo The branch are ${GITHUB_HEAD_REF}
 
       - name: Sourcecode Checkout
         uses: actions/checkout@v3
+
