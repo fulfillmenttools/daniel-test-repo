@@ -18,6 +18,8 @@ jobs:
       - name: Print Release Branch Name
         run: |
           echo The release branch are ${{ inputs.release_branch_name }}
+          echo The release branch are ${GITHUB_REF}
+          echo The release branch are ${GITHUB_HEAD_REF}
 
       - name: Sourcecode Checkout
         uses: actions/checkout@v3
