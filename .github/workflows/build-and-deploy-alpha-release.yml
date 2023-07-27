@@ -15,10 +15,10 @@ jobs:
           echo The branch are ${ GITHUB_REF }
           echo The branch are ${{ github.ref }}
 
-      #  - name: If Statement
-      #    if: startsWith(${{ GITHUB_REF }}, 'refs/heads/release')
-      #    run: |
-      #      echo The branch are ${ GITHUB_REF }
+      - name: If Statement
+        if: startsWith(${ GITHUB_REF }, 'refs/heads/release')
+        run: |
+          echo The branch are ${ GITHUB_REF }
 
       - name: Sourcecode Checkout
         uses: actions/checkout@v3
