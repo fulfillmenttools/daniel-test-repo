@@ -12,7 +12,6 @@ jobs:
     steps:
       - name: Print Branch Name
         run: |
-          echo The branch are ${ GITHUB_REF }
           echo The branch are ${{ GITHUB_REF }}
           echo The branch are ${ github.ref }
           echo The branch are ${{ github.ref }}
