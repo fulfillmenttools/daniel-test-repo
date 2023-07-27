@@ -16,9 +16,10 @@ jobs:
           echo The branch are ${{ github.ref }}
 
       - name: If Statement
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith($GITHUB_REF, 'refs/heads/release')
         run: |
-          echo The branch are ${{ github.repository }}
+          echo The branch are ${{ github.ref }}
+          
 
       - name: Sourcecode Checkout
         uses: actions/checkout@v3
