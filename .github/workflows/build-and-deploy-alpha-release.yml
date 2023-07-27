@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-    name: Execute Steps...
     runs-on: buildjet-8vcpu-ubuntu-2004
 
     steps:
@@ -15,8 +14,10 @@ jobs:
         run: |
           echo The branch are ${github.repository}
 
-      - name: Print Branch Name
+      - name: If statement
         if: startsWith(${GITHUB_HEAD_REF}, "refs/heads/release/")
+        run: |
+          echo The branch are ${github.repository}
 
       - name: Sourcecode Checkout
         uses: actions/checkout@v3
