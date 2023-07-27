@@ -14,8 +14,8 @@ jobs:
         run: |
           echo The branch are ${github.repository}
 
-      - name: If statement
-        if: startsWith(${{GITHUB_HEAD_REF}}, "refs/heads/release/")
+      - name: If Statement
+        if: startsWith(${{github.repository}}, "refs/heads/release/")
         run: |
           echo The branch are ${github.repository}
 
