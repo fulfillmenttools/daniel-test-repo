@@ -12,13 +12,13 @@ jobs:
     steps:
       - name: Print Branch Name
         run: |
-          echo The branch are ${ GITHUB_REF }
           echo The branch are ${{ github.ref }}
 
       - name: If Statement
-        if: ${ startsWith(GITHUB_REF, 'refs/heads/release') }
+        if: ${ !startsWith(github.ref, 'refs/heads/release') }
         run: |
-          echo The branch are ${ GITHUB_REF }
+          echo ERROR: The branch ${{ github.ref }} is no release branch.
+          exit 1
 
       - name: Sourcecode Checkout
         uses: actions/checkout@v3
