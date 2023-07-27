@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Print Branch Name
         run: |
-          echo The branch are ${github.repository}
+          echo The branch are ${{github.repository}}
 
       - name: If Statement
         if: startsWith(${{github.repository}}, "refs/heads/release/")
