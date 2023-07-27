@@ -13,10 +13,10 @@ jobs:
       - name: Print Branch Name
         run: |
           echo The branch are ${{ github.repository }}
-          echo The branch are ${{ GITHUB_REF }}
+          echo The branch are ${{ GITHUB_REF_NAME }}
 
       - name: If Statement
-        if: ${{ startsWith(GITHUB_REF, 'refs/heads/release/') }}
+        if: ${{ startsWith(GITHUB_REF_NAME, 'refs/heads/release/') }}
         run: |
           echo The branch are ${github.repository}
 
