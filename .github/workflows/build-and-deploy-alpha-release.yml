@@ -63,7 +63,7 @@ jobs:
 
       - name: Upload APK to GCP Alpha-Channel
         env:
-          BUILD_DATE: $(TZ=Europe/Berlin date +%Y-%m-%d_%H-%M-%S)
+          BUILD_DATE: ${{ TZ=Europe/Berlin date +%Y-%m-%d_%H-%M-%S }}
           VERSION_NAME: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}-${{ github.run_number }}
           VERSION_CODE: ${{ fromJson(steps.version.outputs.content).versionCode }}
           METADATA_FILE: metadata.json
