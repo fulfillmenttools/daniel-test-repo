@@ -1,6 +1,4 @@
-# Comment
-
-name: "Build & deploy alpha release"
+name: "Build & Deploy Alpha Release"
 
 on:
   workflow_dispatch:
@@ -15,6 +13,11 @@ jobs:
           echo The branch are ${{ github.ref }}
 
       - name: Check current branch is a release branch.
+        if: ${{ startsWith(github.ref, 'refs/heads/release') }}
+        run: |
+          echo SUCCESS: The branch ${{ github.ref }} is a release branch.
+
+      - name: Cancel Build If Current Branch Is No Release Branch.
         if: ${{ !startsWith(github.ref, 'refs/heads/release') }}
         run: |
           echo ERROR: The branch ${{ github.ref }} is no release branch.
@@ -31,3 +34,9 @@ jobs:
 
       - name: Execute Unit Tests
         run: bash ./gradlew testReleaseUnitTest --stacktrace
+
+      - name: Save Unit Tests Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: testReleaseResult
+          path: app/build/reports/tests/testReleaseUnitTest
