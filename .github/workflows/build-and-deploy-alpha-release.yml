@@ -8,10 +8,6 @@ jobs:
     runs-on: buildjet-8vcpu-ubuntu-2004
 
     steps:
-      - name: Print Branch Name
-        run: |
-          echo The branch are ${{ github.ref }}
-
       - name: Check current branch is a release branch.
         if: ${{ startsWith(github.ref, 'refs/heads/release') }}
         run: |
@@ -51,3 +47,25 @@ jobs:
           #BRANCH_TYPE: ${{ env.BRANCH_TYPE }}
           #STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
         #KEY_PASSWORD_RELEASE: ${{ secrets.KEY_PASSWORD_RELEASE }}
+
+      - name: Get Google Cloud Platform Access
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: 'ocff-infra-artifacts-v1'
+          service_account_key: ${{ secrets.GOOGLE_BUCKET_CREDENTIALS }}
+          export_default_credentials: true
+
+      - name: Read Version From JSON
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./buildSrc/version.json
+        run: |
+          echo "MAJOR=${{ fromJson(steps.version.outputs.content).major }}" >> $GITHUB_ENV
+          echo "MINOR=${{ fromJson(steps.version.outputs.content).minor }}" >> $GITHUB_ENV
+          echo "PATCH=${{ fromJson(steps.version.outputs.content).patch }}" >> $GITHUB_ENV
+          echo "VERSION_CODE=${{ fromJson(steps.version.outputs.content).versionCode }}" >> $GITHUB_ENV
+
+      - name: Print Version
+        run: |
+          echo The branch are ${{ env.MAJOR }}-${{ env.MINOR }}-${{ env.PATCH }}-${{ github.run_number }}
