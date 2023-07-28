@@ -67,6 +67,7 @@ jobs:
           VERSION_NAME: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}-${{ github.run_number }}
           VERSION_CODE: ${{ fromJson(steps.version.outputs.content).versionCode }}
           METADATA_FILE: metadata.json
+        run: echo Env-Parameter successfully written.
 
       - name: Upload APK to GCP Alpha-Channel
         run: |
