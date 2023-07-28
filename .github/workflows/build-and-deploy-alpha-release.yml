@@ -60,12 +60,11 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: ./buildSrc/version.json
+
+      - name: Write Env-Parameter
         run: |
           echo "MAJOR=${{ fromJson(steps.version.outputs.content).major }}" >> $GITHUB_ENV
           echo "MINOR=${{ fromJson(steps.version.outputs.content).minor }}" >> $GITHUB_ENV
           echo "PATCH=${{ fromJson(steps.version.outputs.content).patch }}" >> $GITHUB_ENV
           echo "VERSION_CODE=${{ fromJson(steps.version.outputs.content).versionCode }}" >> $GITHUB_ENV
-
-      - name: Print Version
-        run: |
           echo The branch are ${{ env.MAJOR }}-${{ env.MINOR }}-${{ env.PATCH }}-${{ github.run_number }}
