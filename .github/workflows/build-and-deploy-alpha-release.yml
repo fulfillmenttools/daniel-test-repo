@@ -1,4 +1,4 @@
-name: "Build & Deploy Alpha Release"
+name: "Alpha Release - Build & Deploy"
 
 on:
   workflow_dispatch:
@@ -8,10 +8,12 @@ jobs:
     runs-on: buildjet-8vcpu-ubuntu-2004
 
     steps:
-      - name: Check current branch is a release branch.
+      - name: Check current branch is a release branch and remember build time.
+        id: startUpCheck
         if: ${{ startsWith(github.ref, 'refs/heads/release') }}
         run: |
           echo SUCCESS: The branch ${{ github.ref }} is a release branch.
+          echo "BUILD_DATE=$(TZ=Europe/Berlin date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_OUTPUT
 
       - name: Cancel Build If Current Branch Is No Release Branch.
         if: ${{ !startsWith(github.ref, 'refs/heads/release') }}
@@ -63,7 +65,7 @@ jobs:
 
       - name: Upload APK to GCP Alpha-Channel
         env:
-          BUILD_DATE: ${{ TZ=Europe/Berlin date +%Y-%m-%d_%H-%M-%S }}
+          BUILD_DATE: ${{ steps.startUpCheck.outputs.BUILD_DATE }}
           VERSION_NAME: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}-${{ github.run_number }}
           VERSION_CODE: ${{ fromJson(steps.version.outputs.content).versionCode }}
           METADATA_FILE: metadata.json
