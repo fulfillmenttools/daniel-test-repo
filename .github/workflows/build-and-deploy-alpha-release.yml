@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: buildjet-8vcpu-ubuntu-2004
+    runs-on: buildjet-8vcpu-ubuntu-2204
 
     steps:
       - name: Check current branch is a release branch and remember build time.
