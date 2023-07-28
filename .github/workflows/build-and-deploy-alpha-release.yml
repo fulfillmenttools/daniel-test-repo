@@ -51,7 +51,7 @@ jobs:
         #KEY_PASSWORD_RELEASE: ${{ secrets.KEY_PASSWORD_RELEASE }}
 
       - name: Get Google Cloud Platform Access
-        uses: google-github-actions/setup-gcloud@v1
+        uses: google-github-actions/setup-gcloud@v0.2.1
         with:
           project_id: 'ocff-infra-artifacts-v1'
           service_account_key: ${{ secrets.GOOGLE_BUCKET_CREDENTIALS }}
