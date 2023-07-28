@@ -57,7 +57,7 @@ jobs:
 
       - name: Read Version From JSON
         id: version
-        uses: juliangruber/read-file-action@v1
+        uses: juliangruber/read-file-action@02bbba9876a8f870efd4ad64e3b9088d3fb94d4b
         with:
           path: ./buildSrc/version.json
 
