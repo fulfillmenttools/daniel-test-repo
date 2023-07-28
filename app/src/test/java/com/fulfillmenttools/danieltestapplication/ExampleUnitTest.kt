@@ -1,17 +1,26 @@
 package com.fulfillmenttools.danieltestapplication
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
-import org.junit.Assert.*
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
+    fun addition_isCorrect_01() {
         assertEquals(4, 2 + 2)
+    }
+
+    @Test
+    fun addition_isCorrect_02() {
+        assertEquals(6, 2 + 2 + 2)
+    }
+
+    @Test
+    fun addition_isCorrect_03() {
+        assertEquals(8, 2 + 2 + 2 + 2)
+    }
+
+    @Test
+    fun addition_isCorrect_04() {
+        assertEquals(28, 2 + 2 + 7)
     }
 }
