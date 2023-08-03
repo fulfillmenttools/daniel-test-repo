@@ -36,6 +36,6 @@ jobs:
 
       - name: Copy APK from alpha to beta channel (Google Cloud Storage)
         run: |
-          GCS_PATH_FROM=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha/
-          GCS_PATH_TO=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }}/beta/
-          gcloud storage cp -n GCS_PATH_FROM GCS_PATH_TO
+          GCS_PATH_FROM=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha
+          GCS_PATH_TO=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }}/beta
+          gcloud storage cp -r GCS_PATH_FROM GCS_PATH_TO
