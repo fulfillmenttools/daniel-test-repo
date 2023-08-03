@@ -1,0 +1,48 @@
+name: "Alpha To Beta"
+# appFolder = hubis-app
+on:
+  workflow_dispatch:
+    inputs:
+      version_for_beta_channel:
+        description: 'Version of application in format "{major}-{minor}-{patch}-{build_nr}"'
+        required: true
+
+# USAGE: ${{ github.event.inputs.version_for_beta_channel }}
+
+jobs:
+  build:
+    runs-on: buildjet-8vcpu-ubuntu-2204
+
+    steps:
+      - name: Get Google Cloud Platform Access
+        uses: google-github-actions/setup-gcloud@v0.2.1
+        with:
+          project_id: 'ocff-infra-artifacts-v1'
+          service_account_key: ${{ secrets.GOOGLE_BUCKET_CREDENTIALS }}
+          export_default_credentials: true
+
+      - name: Check that an Alpha-build exists
+        run: |
+          gsutil ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/alpha"
+          test $? -ne 0 && echo "Alpha build doesn't exist, exiting." && exit 1
+
+      - name: Check that no Beta-build exists
+        run: |
+          gsutil ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/beta"
+          test $? -eq 0 && echo "Beta build already exist, exiting." && exit 1
+
+      - name: Check that no GA-build exists
+        run: |
+          gsutil ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/ga"
+          test $? -eq 0 && echo "GA build already exist, exiting." && exit 1
+
+      - name: Copy APK from GCP Alpha- to Beta-Channel
+        env:
+          BUILD_DATE: ${{ steps.startUpCheck.outputs.BUILD_DATE }}
+          VERSION_NAME: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}-${{ github.run_number }}
+          VERSION_CODE: ${{ fromJson(steps.version.outputs.content).versionCode }}
+          METADATA_FILE: metadata.json
+        run: |
+          GS_PATH_FROM=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha/
+          GS_PATH_TO=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }}/beta/
+          gsutil cp -n $GS_PATH_FROM GS_PATH_TO
