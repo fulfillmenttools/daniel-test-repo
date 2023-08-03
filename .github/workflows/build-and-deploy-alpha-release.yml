@@ -1,4 +1,4 @@
-name: "Alpha Release - Build & Deploy"
+name: "Alpha release - Build repository & deploy"
 
 on:
   workflow_dispatch:

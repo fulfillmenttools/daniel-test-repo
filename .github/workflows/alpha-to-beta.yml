@@ -1,10 +1,10 @@
-name: "Alpha to Beta"
+name: "Beta release - Move alpha to beta"
 # appFolder = hubis-app
 on:
   workflow_dispatch:
     inputs:
       version_for_beta_channel:
-        description: 'Version of application in format {major}-{minor}-{patch}-{build_nr}'
+        description: 'Version of alpha app in format {major}-{minor}-{patch}-{build_nr}'
         required: true
 
 jobs:
@@ -12,34 +12,33 @@ jobs:
     runs-on: buildjet-8vcpu-ubuntu-2204
 
     steps:
-      - name: Get Google Cloud Platform Access
+      - name: Get Google Cloud Platform access
         uses: google-github-actions/setup-gcloud@v0.2.1
         with:
           project_id: 'ocff-infra-artifacts-v1'
           service_account_key: ${{ secrets.GOOGLE_BUCKET_CREDENTIALS }}
           export_default_credentials: true
 
-      - name: Check that an Alpha-build exists (Google Cloud Storage) NEW
-        run: |
-          gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} 
-          test $? -ne 0 && echo "Alpha build doesn't exist, exiting." && exit 99
+      - name: Check that an alpha build exists (Google Cloud Storage) NEW
+        run: ./.github/scripts/build.sh
+        shell: bash
 
-      - name: Check that an Alpha-build exists (Google Cloud Storage)
+      - name: Check that an alpha build exists (Google Cloud Storage)
         run: |
           gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/alpha"
           test $? -ne 0 && echo "Alpha build doesn't exist, exiting." && exit 99
 
-      - name: Check that no Beta-build exists (Google Cloud Storage)
+      - name: Check that no beta build exists (Google Cloud Storage)
         run: |
           gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/beta"
           test $? -eq 0 && echo "Beta build already exist, exiting." && exit 99
 
-      - name: Check that no GA-build exists (Google Cloud Storage)
+      - name: Check that no GA build exists (Google Cloud Storage)
         run: |
           gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/ga"
           test $? -eq 0 && echo "GA build already exist, exiting." && exit 99
 
-      - name: Copy APK from Alpha- to Beta-Channel (Google Cloud Storage)
+      - name: Copy APK from alpha to beta channel (Google Cloud Storage)
         run: |
           GCS_PATH_FROM=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha/
           GCS_PATH_TO=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }}/beta/
