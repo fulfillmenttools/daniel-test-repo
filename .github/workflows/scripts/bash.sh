@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-releaseVersion="${1:1-7-0-54}"
+releaseVersion="${1:-1-7-0-54}"
 stage="${2:-alpha}"
 bucketPrefix="${3:-gs://ocff-deployment-mobileapps/hubis-app}"
 
