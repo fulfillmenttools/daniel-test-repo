@@ -1,4 +1,4 @@
-name: "Alpha stage - Build & deploy"
+name: "Alpha stage - Build & deploy to alpha"
 
 on:
   workflow_dispatch:
