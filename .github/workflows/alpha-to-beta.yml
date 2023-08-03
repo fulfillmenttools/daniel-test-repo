@@ -21,21 +21,21 @@ jobs:
 
       - name: Check that an Alpha-build exists (Google Cloud Storage)
         run: |
-          gsutil ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/alpha"
+          gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/alpha"
           test $? -ne 0 && echo "Alpha build doesn't exist, exiting." && exit 1
 
       - name: Check that no Beta-build exists (Google Cloud Storage)
         run: |
-          gsutil ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/beta"
+          gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/beta"
           test $? -eq 0 && echo "Beta build already exist, exiting." && exit 1
 
       - name: Check that no GA-build exists (Google Cloud Storage)
         run: |
-          gsutil ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/ga"
+          gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/ga"
           test $? -eq 0 && echo "GA build already exist, exiting." && exit 1
 
       - name: Copy APK from Alpha- to Beta-Channel (Google Cloud Storage)
         run: |
           GCS_PATH_FROM=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha/
           GCS_PATH_TO=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }}/beta/
-          gsutil cp -n GCS_PATH_FROM GCS_PATH_TO
+          gcloud storage cp -n GCS_PATH_FROM GCS_PATH_TO
