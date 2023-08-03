@@ -22,22 +22,22 @@ jobs:
       - name: Check that an Alpha-build exists (Google Cloud Storage) NEW
         run: |
           gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} 
-          test $? -ne 0 && echo "Alpha build doesn't exist, exiting." && exit 1
+          test $? -ne 0 && echo "Alpha build doesn't exist, exiting." && exit 99
 
       - name: Check that an Alpha-build exists (Google Cloud Storage)
         run: |
           gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/alpha"
-          test $? -ne 0 && echo "Alpha build doesn't exist, exiting." && exit 1
+          test $? -ne 0 && echo "Alpha build doesn't exist, exiting." && exit 99
 
       - name: Check that no Beta-build exists (Google Cloud Storage)
         run: |
           gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/beta"
-          test $? -eq 0 && echo "Beta build already exist, exiting." && exit 1
+          test $? -eq 0 && echo "Beta build already exist, exiting." && exit 99
 
       - name: Check that no GA-build exists (Google Cloud Storage)
         run: |
           gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/ga"
-          test $? -eq 0 && echo "GA build already exist, exiting." && exit 1
+          test $? -eq 0 && echo "GA build already exist, exiting." && exit 99
 
       - name: Copy APK from Alpha- to Beta-Channel (Google Cloud Storage)
         run: |
