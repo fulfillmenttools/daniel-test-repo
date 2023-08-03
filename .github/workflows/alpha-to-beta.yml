@@ -20,7 +20,7 @@ jobs:
           export_default_credentials: true
 
       - name: Check that an alpha build exists (Google Cloud Storage) NEW
-        run: ./.github/scripts/build.sh
+        run: ./.github/workflows/scripts/build.sh
         shell: bash
 
       - name: Check that an alpha build exists (Google Cloud Storage)
