@@ -1,5 +1,5 @@
-name: "Beta release - Move alpha to beta"
-# appFolder = hubis-app
+name: "Beta stage - Move alpha to beta"
+
 on:
   workflow_dispatch:
     inputs:
@@ -12,6 +12,9 @@ jobs:
     runs-on: buildjet-8vcpu-ubuntu-2204
 
     steps:
+      - name: Sourcecode Checkout
+        uses: actions/checkout@v3
+
       - name: Get Google Cloud Platform access
         uses: google-github-actions/setup-gcloud@v0.2.1
         with:
@@ -19,27 +22,17 @@ jobs:
           service_account_key: ${{ secrets.GOOGLE_BUCKET_CREDENTIALS }}
           export_default_credentials: true
 
-      - name: Sourcecode Checkout
-        uses: actions/checkout@v3
-
-      - name: Execute script NEW
-        run: ./.github/workflows/scripts/bash.sh
+      - name: Check that an alpha build exists (Google Cloud Storage)
+        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} alpha hubis-app
         shell: bash
 
-      - name: Check that an alpha build exists (Google Cloud Storage)
-        run: |
-          gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/alpha"
-          test $? -ne 0 && echo "Alpha build doesn't exist, exiting." && exit 99
-
       - name: Check that no beta build exists (Google Cloud Storage)
-        run: |
-          gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/beta"
-          test $? -eq 0 && echo "Beta build already exist, exiting." && exit 99
+        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} beta hubis-app
+        shell: bash
 
       - name: Check that no GA build exists (Google Cloud Storage)
-        run: |
-          gcloud storage ls gs://ocff-deployment-mobileapps/hubis-app/releases/${{ github.event.inputs.version_for_beta_channel }} | grep "/ga"
-          test $? -eq 0 && echo "GA build already exist, exiting." && exit 99
+        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga hubis-app
+        shell: bash
 
       - name: Copy APK from alpha to beta channel (Google Cloud Storage)
         run: |
