@@ -57,7 +57,7 @@ jobs:
       - name: Build Android App Bundle
         run: |
           bash ./gradlew bundleRelease --stacktrace
-        env:
+        #env:
         #BRANCH_TYPE: ${{ env.BRANCH_TYPE }}
         #STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
         #KEY_PASSWORD_RELEASE: ${{ secrets.KEY_PASSWORD_RELEASE }}
