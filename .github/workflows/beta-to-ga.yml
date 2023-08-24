@@ -18,12 +18,14 @@ jobs:
       ##############################################################################################
       #     SETUP
       ##############################################################################################
+
       - name: Sourcecode checkout
         uses: actions/checkout@v3
 
       ##############################################################################################
       #     CHECK CURRENT STAGE STATUS
       ##############################################################################################
+
       - name: Get Google Cloud Platform access
         uses: google-github-actions/setup-gcloud@v0.2.1
         with:
@@ -46,5 +48,6 @@ jobs:
       ##############################################################################################
       #     MOVE FROM BETA TO GA STAGE
       ##############################################################################################
+
       - name: Move app from BETA to GA stage (Google Cloud Storage)
         run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_GCS_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/beta gs://ocff-deployment-mobileapps/$APP_GCS_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/ga

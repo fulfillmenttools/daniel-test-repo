@@ -1,10 +1,10 @@
-name: "Beta stage - From alpha to BETA"
+name: "Beta stage - From ALPHA to BETA"
 
 on:
   workflow_dispatch:
     inputs:
       version_for_beta_channel:
-        description: 'Version of ALPHA app in format {major}-{minor}-{patch}-{build_nr}'
+        description: 'Version of ALPHA app in format {major}-{minor}-{patch}-{releaseAutoIncrement}'
         required: true
 
 env:
@@ -18,6 +18,8 @@ jobs:
       ##############################################################################################
       #     SETUP
       ##############################################################################################
+
+      # TODO - Validate version_for_beta_channel input!
 
       - name: Sourcecode checkout
         uses: actions/checkout@v3
@@ -46,22 +48,20 @@ jobs:
         shell: bash
 
       ##############################################################################################
-      #     UPDATE GIT RELEASE TO BETA
-      ##############################################################################################
-
-      - name: Update GitHub release v${{ github.event.inputs.version_for_beta_channel }} to BETA
-        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          name: Release ${{ github.event.inputs.version_for_beta_channel }} [BETA]
-          tag_name: v${{ github.event.inputs.version_for_beta_channel }}
-          draft: false
-          prerelease: false
-
-      ##############################################################################################
       #     MOVE FROM ALPHA TO BETA STAGE
       ##############################################################################################
 
       - name: Move app from ALPHA to BETA stage (Google Cloud Storage)
         run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_GCS_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha gs://ocff-deployment-mobileapps/$APP_GCS_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/beta
+
+      # TODO - MOVE TO TOP!
+      - name: Upload Android App Bundle (*.aab) to Google Play (BETA track)
+        uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          packageName: com.ocfulfillment.fulfillmentapp
+          releaseFiles: ./app/build/outputs/bundle/release/fft_${{ env.APP_VERSION }}_${{ env.BRANCH_TYPE }}-release.aab
+          releaseName: fulfillmenttools ${{ fromJson(steps.version.outputs.content).versionCode }} (${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }})
+          track: beta
+          status: completed
+          mappingFile: ./app/build/outputs/mapping/release/mapping.txt
