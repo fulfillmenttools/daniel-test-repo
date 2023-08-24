@@ -18,12 +18,14 @@ jobs:
       ##############################################################################################
       #     SETUP
       ##############################################################################################
+
       - name: Sourcecode checkout
         uses: actions/checkout@v3
 
       ##############################################################################################
       #     CHECK CURRENT STAGE STATUS
       ##############################################################################################
+
       - name: Get Google Cloud Platform access
         uses: google-github-actions/setup-gcloud@v0.2.1
         with:
@@ -44,7 +46,22 @@ jobs:
         shell: bash
 
       ##############################################################################################
+      #     UPDATE GIT RELEASE TO BETA
+      ##############################################################################################
+
+      - name: Update GitHub release v${{ github.event.inputs.version_for_beta_channel }} to BETA
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: Release ${{ github.event.inputs.version_for_beta_channel }} [BETA]
+          tag_name: v${{ github.event.inputs.version_for_beta_channel }}
+          draft: false
+          prerelease: false
+
+      ##############################################################################################
       #     MOVE FROM ALPHA TO BETA STAGE
       ##############################################################################################
+
       - name: Move app from ALPHA to BETA stage (Google Cloud Storage)
         run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_GCS_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha gs://ocff-deployment-mobileapps/$APP_GCS_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/beta

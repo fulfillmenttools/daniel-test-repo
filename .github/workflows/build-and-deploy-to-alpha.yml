@@ -63,7 +63,7 @@ jobs:
         #KEY_PASSWORD_RELEASE: ${{ secrets.KEY_PASSWORD_RELEASE }}
 
       ##############################################################################################
-      #     GIT TAG HANDLING
+      #     GIT TAG AND RELEASE HANDLING
       ##############################################################################################
 
       - name: Increment 'releaseAutoIncrement' JSON value
@@ -82,22 +82,12 @@ jobs:
         with:
           path: ./app/version.json
 
-      - name: Create GitHub release v${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
+      - name: Create GitHub release v${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }} for ALPHA
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: Release ${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }} [ALPHA]
-          tag_name: v${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
-          draft: false
-          prerelease: false
-
-      - name: Create GitHub release v${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
-        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          name: Release ${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }} [BETA]
           tag_name: v${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
           draft: false
           prerelease: false
@@ -126,6 +116,7 @@ jobs:
           gsutil cp -n ./app/build/outputs/apk_from_bundle/release/*.apk $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
 
+      # TODO - MOVE TO TOP!
       - name: Upload Android App Bundle (*.aab) to Google Play (ALPHA track)
         uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
         with:
