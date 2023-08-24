@@ -2,5 +2,7 @@
   "major": 1,
   "minor": 7,
   "patch": 0,
-  "versionCode": 1
+  "versionCode": 1,
+  "__COMMENT__": "Attention: Don't manipulate the 'autoIncrement' field!",
+  "releaseAutoIncrement": 10
 }
