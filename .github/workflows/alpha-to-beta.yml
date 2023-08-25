@@ -1,4 +1,4 @@
-name: "Beta stage - From ALPHA to BETA"
+name: "BETA stage - From ALPHA to BETA"
 
 on:
   workflow_dispatch:
@@ -62,6 +62,6 @@ jobs:
           packageName: com.ocfulfillment.fulfillmentapp
           releaseFiles: ./app/build/outputs/bundle/release/fft_${{ env.APP_VERSION }}_${{ env.BRANCH_TYPE }}-release.aab
           releaseName: fulfillmenttools ${{ fromJson(steps.version.outputs.content).versionCode }} (${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }})
-          track: beta
+          track: beta testing
           status: completed
           mappingFile: ./app/build/outputs/mapping/release/mapping.txt
