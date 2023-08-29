@@ -2,6 +2,8 @@ name: "ALPHA stage - Build & deploy to ALPHA"
 
 on:
   workflow_dispatch:
+    branches:
+      - 'release/**'
 
 env:
   BRANCH_STARTS_WITH: refs/heads/release
