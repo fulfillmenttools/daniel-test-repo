@@ -17,7 +17,7 @@ jobs:
 
       - name: Check current branch is a release branch and remember build time
         id: startUpCheck
-        if: ${{ startsWith(github.ref, $BRANCH_STARTS_WITH) }}
+        if: ${{ startsWith(github.ref, BRANCH_STARTS_WITH) }}
         run: |
           echo SUCCESS: The branch ${{ github.ref }} is a release branch.
           echo "BUILD_DATE=$(TZ=Europe/Berlin date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_OUTPUT
