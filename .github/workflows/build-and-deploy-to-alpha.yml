@@ -72,7 +72,7 @@ jobs:
 
       - name: Increment 'releaseAutoIncrement' JSON value
         run: |
-          cat $PATH_TO_VERSION_JSON/version.json' | jq '.releaseAutoIncrement = .releaseAutoIncrement + 1' | tee $PATH_TO_VERSION_JSON/version.json
+          cat $PATH_TO_VERSION_JSON/version.json | jq '.releaseAutoIncrement = .releaseAutoIncrement + 1' | tee $PATH_TO_VERSION_JSON/version.json
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git add ./app/version.json
