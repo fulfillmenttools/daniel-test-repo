@@ -5,6 +5,7 @@ on:
 
 env:
   BRANCH_STARTS_WITH: refs/heads/release
+  PATH_TO_VERSION_JSON: ./app
 
 jobs:
   build:
@@ -15,10 +16,6 @@ jobs:
       #     SETUP
       ##############################################################################################
 
-      - name: BRANCH OUTPUT
-        run: |
-          echo The branch is named ${{ github.ref }}
-
       - name: Check current branch is a release branch and remember build time
         id: startUpCheck
         if: ${{ startsWith(github.ref, env.BRANCH_STARTS_WITH) }}
@@ -27,7 +24,7 @@ jobs:
           echo "BUILD_DATE=$(TZ=Europe/Berlin date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_OUTPUT
 
       - name: Cancel build if current branch is no release branch
-        if: ${{ !startsWith(github.ref, 'refs/heads/release') }}
+        if: ${{ !startsWith(github.ref, env.BRANCH_STARTS_WITH) }}
         run: |
           echo ERROR: The branch ${{ github.ref }} is no release branch.
           exit 1
@@ -74,9 +71,8 @@ jobs:
       ##############################################################################################
 
       - name: Increment 'releaseAutoIncrement' JSON value
-        if: ${{ startsWith(github.ref, 'refs/heads/release') }}
         run: |
-          cat ./app/version.json | jq '.releaseAutoIncrement = .releaseAutoIncrement + 1' | tee ./app/version.json
+          cat $PATH_TO_VERSION_JSON/version.json' | jq '.releaseAutoIncrement = .releaseAutoIncrement + 1' | tee $PATH_TO_VERSION_JSON/version.json
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git add ./app/version.json
@@ -87,7 +83,7 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@02bbba9876a8f870efd4ad64e3b9088d3fb94d4b
         with:
-          path: ./app/version.json
+          path: $PATH_TO_VERSION_JSON/version.json
 
       - name: Create GitHub release v${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }} for ALPHA
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
