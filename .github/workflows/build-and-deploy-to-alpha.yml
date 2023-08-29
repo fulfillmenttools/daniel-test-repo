@@ -15,6 +15,10 @@ jobs:
       #     SETUP
       ##############################################################################################
 
+      - name: BRANCH OUTPUT
+        run: |
+          echo The branch is named ${{ github.ref }}
+
       - name: Check current branch is a release branch and remember build time
         id: startUpCheck
         if: ${{ startsWith(github.ref, '$BRANCH_STARTS_WITH') }}
