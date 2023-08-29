@@ -5,9 +5,9 @@ on:
 
 env:
   APP_NAME: hubis-app
-  APK_RELEASE_PATH: ./app/build/outputs/apk_from_bundle/release
   BRANCH_STARTS_WITH: refs/heads/release
   PATH_TO_VERSION_JSON: ./app
+  PATH_TO_APK_RELEASE: ./app/build/outputs/apk_from_bundle/release
 
 jobs:
   build:
@@ -122,7 +122,7 @@ jobs:
           # writeMetadata.js file needs BUILD_DATE, VERSION_NAME, VERSION_CODE and METADATA_FILE parameters
           node ./.github/workflows/scripts/writeMetadata.js
           GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME }}/releases/${{ env.VERSION_NAME }}/alpha/
-          gsutil cp -n ${{ env.APK_RELEASE_PATH }}/*.apk $GS_PATH
+          gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
 
       # TODO - MOVE TO TOP!
