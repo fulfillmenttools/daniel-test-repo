@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
 
 env:
+  APP_NAME: hubis-app
+  APK_RELEASE_PATH: ./app/build/outputs/apk_from_bundle/release
   BRANCH_STARTS_WITH: refs/heads/release
   PATH_TO_VERSION_JSON: ./app
 
@@ -46,6 +48,25 @@ jobs:
         run: bash ./gradlew testReleaseUnitTest --stacktrace
 
       ##############################################################################################
+      #     VERSION-JSON HANDLING
+      ##############################################################################################
+
+      - name: Increment 'releaseAutoIncrement' JSON value
+        run: |
+          cat $PATH_TO_VERSION_JSON/version.json | jq '.releaseAutoIncrement = .releaseAutoIncrement + 1' | tee $PATH_TO_VERSION_JSON/version.json
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git add ./app/version.json
+          git commit -m "Increment 'releaseAutoIncrement' value in 'version.json'."
+          git push
+
+      - name: Read version from JSON
+        id: version
+        uses: juliangruber/read-file-action@02bbba9876a8f870efd4ad64e3b9088d3fb94d4b
+        with:
+          path: ${{ env.PATH_TO_VERSION_JSON }}/version.json
+
+      ##############################################################################################
       #     BUILDING
       ##############################################################################################
 
@@ -67,23 +88,8 @@ jobs:
         #KEY_PASSWORD_RELEASE: ${{ secrets.KEY_PASSWORD_RELEASE }}
 
       ##############################################################################################
-      #     GIT TAG AND RELEASE HANDLING
+      #     GIT TAG HANDLING
       ##############################################################################################
-
-      - name: Increment 'releaseAutoIncrement' JSON value
-        run: |
-          cat $PATH_TO_VERSION_JSON/version.json | jq '.releaseAutoIncrement = .releaseAutoIncrement + 1' | tee $PATH_TO_VERSION_JSON/version.json
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-          git add ./app/version.json
-          git commit -m "Increment 'releaseAutoIncrement' value in 'version.json'."
-          git push
-
-      - name: Read version from JSON
-        id: version
-        uses: juliangruber/read-file-action@02bbba9876a8f870efd4ad64e3b9088d3fb94d4b
-        with:
-          path: ${{ env.PATH_TO_VERSION_JSON }}/version.json
 
       - name: Create GitHub release v${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }} for ALPHA
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
@@ -109,14 +115,14 @@ jobs:
       - name: Upload Android APK to ALPHA stage (Google Cloud Storage)
         env:
           BUILD_DATE: ${{ steps.startUpCheck.outputs.BUILD_DATE }}
-          VERSION_NAME: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
+          VERSION_NAME: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}_${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
           VERSION_CODE: ${{ fromJson(steps.version.outputs.content).versionCode }}
           METADATA_FILE: metadata.json
         run: |
           # writeMetadata.js file needs BUILD_DATE, VERSION_NAME, VERSION_CODE and METADATA_FILE parameters
           node ./.github/workflows/scripts/writeMetadata.js
-          GS_PATH=gs://ocff-deployment-mobileapps/hubis-app/releases/${{ env.VERSION_NAME }}/alpha/
-          gsutil cp -n ./app/build/outputs/apk_from_bundle/release/*.apk $GS_PATH
+          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME }}/releases/${{ env.VERSION_NAME }}/alpha/
+          gsutil cp -n ${{ env.APK_RELEASE_PATH }}/*.apk $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
 
       # TODO - MOVE TO TOP!
