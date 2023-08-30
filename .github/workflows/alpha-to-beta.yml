@@ -22,10 +22,10 @@ jobs:
       #     SETUP
       ##############################################################################################
 
-      #  - name: Sourcecode checkout
-      #    uses: actions/checkout@v3
+      - name: Sourcecode checkout
+        uses: actions/checkout@v3
 
-      - name: Move app from ALPHA to BETA stage (Google Cloud Storage)
+      - name: Format version from input into major.minor.patch-iterator
         run:
           echo "APP_VERSION_NAME_DOTS="./.github/workflows/scripts/formatVersion.sh ${{ github.event.inputs.version_for_beta_channel }} >> $GITHUB_ENV
         shell: bash
@@ -72,7 +72,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           packageName: ${{ env.PACKAGE_NAME }}
           releaseFiles: ./downloads/beta/${{ env.APP_NAME_FOLDER }}_${{ github.event.inputs.version_for_beta_channel }}_release.aab
-          releaseName: ${{ env.APP_NAME }} (${{ github.event.inputs.version_for_beta_channel }})
+          releaseName: ${{ env.APP_NAME }} (${{ env.APP_VERSION_NAME_DOTS }})
           track: beta testing
           status: completed
           mappingFile: ./downloads/beta/mapping.txt
