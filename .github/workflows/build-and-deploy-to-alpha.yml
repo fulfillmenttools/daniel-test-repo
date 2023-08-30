@@ -66,7 +66,7 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@02bbba9876a8f870efd4ad64e3b9088d3fb94d4b
         with:
-          path: $PATH_TO_VERSION_JSON/version.json
+          path: ${{ env.PATH_TO_VERSION_JSON }}/version.json
 
       - name: Save app-version to environment parameters
         run: echo "App-version is ${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}"
