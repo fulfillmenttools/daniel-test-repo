@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 env:
+  # APP_NAME -> no empty spaces or special character
   APP_NAME: hubis-app
   BRANCH_STARTS_WITH: refs/heads/release
   PATH_TO_VERSION_JSON: ./app
@@ -65,7 +66,12 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@02bbba9876a8f870efd4ad64e3b9088d3fb94d4b
         with:
-          path: ${{ env.PATH_TO_VERSION_JSON }}/version.json
+          path: $PATH_TO_VERSION_JSON/version.json
+
+      - name: Save app-version to environment parameters
+        env:
+          APP_VERSION_DOTS: ${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
+          APP_VERSION_DASH: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
 
       ##############################################################################################
       #     BUILDING
@@ -92,13 +98,13 @@ jobs:
       #     GIT TAG HANDLING
       ##############################################################################################
 
-      - name: Create GitHub release v${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
+      - name: Create GitHub release v$env.APP_VERSION_DOTS
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release v${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
-          tag_name: v${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
+          name: Release v$APP_VERSION_DOTS
+          tag_name: v$APP_VERSION_DOTS
           draft: false
           prerelease: false
 
@@ -107,6 +113,10 @@ jobs:
       ##############################################################################################
 
       # TODO
+      #   - name: Rename files
+      #     run: |
+      #       mv oldname $APP_NAME__release.apk
+      #       mv oldname newname
 
       ##############################################################################################
       #     UPLOAD FILES
