@@ -25,7 +25,7 @@ jobs:
         if: ${{ startsWith(github.ref, env.BRANCH_STARTS_WITH) }}
         run: |
           echo SUCCESS: The branch ${{ github.ref }} is a release branch.
-          echo "BUILD_DATE=$(TZ=Europe/Berlin date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_OUTPUT
+          echo "BUILD_DATE=$(TZ=Europe/Berlin date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_ENV
 
       - name: Cancel build if current branch is no release branch
         if: ${{ !startsWith(github.ref, env.BRANCH_STARTS_WITH) }}
@@ -99,7 +99,7 @@ jobs:
       #     GIT TAG HANDLING
       ##############################################################################################
 
-      - name: Create GitHub release
+      - name: Create GitHub release ${{ env.APP_VERSION_NAME_DOTS }}
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -132,7 +132,6 @@ jobs:
 
       - name: Upload Android APK & AAB to ALPHA stage (Google Cloud Storage)
         env:
-          BUILD_DATE: ${{ steps.startUpCheck.outputs.BUILD_DATE }}
           VERSION_CODE: ${{ fromJson(steps.version.outputs.content).versionCode }}
           METADATA_FILE: metadata.json
         run: |
