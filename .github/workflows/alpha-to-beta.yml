@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version_for_beta_channel:
-        description: 'Version of ALPHA app in format {major}-{minor}-{patch}-{releaseAutoIncrement}' 1-2-0-100
+        description: 'Version of ALPHA app in format {major}-{minor}-{patch}-{releaseAutoIncrement}'
         required: true
 
 env:
