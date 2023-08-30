@@ -99,13 +99,13 @@ jobs:
       #     GIT TAG HANDLING
       ##############################################################################################
 
-      - name: Create GitHub release v${{ env.APP_VERSION_NAME_DOTS }}
+      - name: Create GitHub release
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release v$APP_VERSION_NAME_DOTS
-          tag_name: v$APP_VERSION_NAME_DOTS
+          name: Release v${{ env.APP_VERSION_NAME_DOTS }}
+          tag_name: v${{ env.APP_VERSION_NAME_DOTS }}
           draft: false
           prerelease: false
 
@@ -114,9 +114,9 @@ jobs:
       ##############################################################################################
 
       # TODO
-      #   - name: Rename files
-      #     run: |
-      #       mv oldname $APP_NAME__release.apk
+      - name: Rename files
+        run: |
+          mv ${{ env.PATH_TO_APK_RELEASE }}/*.apk ${{ env.PATH_TO_APK_RELEASE }}/${{ env.APP_NAME }}_release.apk
       #       mv oldname newname
 
       ##############################################################################################
