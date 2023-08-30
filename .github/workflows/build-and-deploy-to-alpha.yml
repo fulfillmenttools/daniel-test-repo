@@ -132,10 +132,11 @@ jobs:
 
       - name: Upload Android APK & AAB to ALPHA stage (Google Cloud Storage)
         env:
+          VERSION_NAME: $APP_VERSION_NAME_DASH
           VERSION_CODE: ${{ fromJson(steps.version.outputs.content).versionCode }}
           METADATA_FILE: metadata.json
         run: |
-          # writeMetadata.js file needs BUILD_DATE, APP_VERSION_NAME_DASH, VERSION_CODE and METADATA_FILE parameters
+          # writeMetadata.js file needs BUILD_DATE, VERSION_NAME, VERSION_CODE and METADATA_FILE parameters
           node ./.github/workflows/scripts/writeMetadata.js
           GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME }}/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
           gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
