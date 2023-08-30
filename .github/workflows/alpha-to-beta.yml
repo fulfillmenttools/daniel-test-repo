@@ -26,7 +26,7 @@ jobs:
 
       - name: Format version from input into major.minor.patch-iterator
         run:
-          echo "APP_VERSION_NAME_DOTS="./.github/workflows/scripts/formatVersion.sh ${{ github.event.inputs.version_for_beta_channel }} >> $GITHUB_ENV
+          echo "APP_VERSION_NAME_DOTS=${{ ./.github/workflows/scripts/formatVersion.sh github.event.inputs.version_for_beta_channel }}" >> $GITHUB_ENV
         shell: bash
 
       - name: ECHO NAME
