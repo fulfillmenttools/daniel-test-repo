@@ -69,6 +69,7 @@ jobs:
           path: $PATH_TO_VERSION_JSON/version.json
 
       - name: Save app-version to environment parameters
+        run: echo "App-version is ${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}"
         env:
           APP_VERSION_DOTS: ${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
           APP_VERSION_DASH: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
