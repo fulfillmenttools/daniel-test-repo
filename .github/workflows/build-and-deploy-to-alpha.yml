@@ -99,7 +99,7 @@ jobs:
       #     GIT TAG HANDLING
       ##############################################################################################
 
-      - name: Create GitHub release v$APP_VERSION_NAME_DOTS
+      - name: Create GitHub release v${{ env.APP_VERSION_NAME_DOTS }}
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
