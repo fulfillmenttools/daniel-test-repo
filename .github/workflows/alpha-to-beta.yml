@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version_for_beta_channel:
-        description: 'Version of ALPHA app in format {major}-{minor}-{patch}-{releaseAutoIncrement}'
+        description: 'Version of ALPHA app in format {major}-{minor}-{patch}-{releaseAutoIncrement}' 1-2-0-100
         required: true
 
 env:
@@ -26,9 +26,8 @@ jobs:
 
       - name: Format version from input into major.minor.patch-iterator
         run:
-          echo "APP_VERSION_NAME_DOTS=${{ ./.github/workflows/scripts/formatVersion.sh 1-1-1-10 }}"
-        #>> $GITHUB_ENV
-        #shell: bash
+          echo "APP_VERSION_NAME_DOTS=$(./.github/workflows/scripts/formatVersion.sh ${{ github.event.inputs.version_for_beta_channel }})" >> $GITHUB_ENV
+        shell: bash
 
       - name: ECHO NAME
         run: echo ${{ env.APP_VERSION_NAME_DOTS }}
