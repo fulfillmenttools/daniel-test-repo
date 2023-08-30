@@ -104,8 +104,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release v${{ env.APP_VERSION_NAME_DOTS }}
-          tag_name: v${{ env.APP_VERSION_NAME_DOTS }}
+          name: Release ${{ env.APP_VERSION_NAME_DOTS }}
+          tag_name: ${{ env.APP_VERSION_NAME_DOTS }}
           draft: false
           prerelease: false
 
