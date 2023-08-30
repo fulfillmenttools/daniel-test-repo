@@ -68,11 +68,11 @@ jobs:
         with:
           path: ${{ env.PATH_TO_VERSION_JSON }}/version.json
 
-      - name: Save app-version to environment parameters
-        run: echo "App-version is ${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}"
+      - name: Save app-version-name to environment parameters
+        run: echo "App-version-name is ${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}"
         env:
-          APP_VERSION_DOTS: ${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
-          APP_VERSION_DASH: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
+          APP_VERSION_NAME_DOTS: ${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
+          APP_VERSION_NAME_DASH: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}-${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
 
       ##############################################################################################
       #     BUILDING
@@ -99,13 +99,13 @@ jobs:
       #     GIT TAG HANDLING
       ##############################################################################################
 
-      - name: Create GitHub release v$env.APP_VERSION_DOTS
+      - name: Create GitHub release v$APP_VERSION_NAME_DOTS
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release v$APP_VERSION_DOTS
-          tag_name: v$APP_VERSION_DOTS
+          name: Release v$APP_VERSION_NAME_DOTS
+          tag_name: v$APP_VERSION_NAME_DOTS
           draft: false
           prerelease: false
 
@@ -133,13 +133,12 @@ jobs:
       - name: Upload Android APK & AAB to ALPHA stage (Google Cloud Storage)
         env:
           BUILD_DATE: ${{ steps.startUpCheck.outputs.BUILD_DATE }}
-          VERSION_NAME: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}_${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
           VERSION_CODE: ${{ fromJson(steps.version.outputs.content).versionCode }}
           METADATA_FILE: metadata.json
         run: |
-          # writeMetadata.js file needs BUILD_DATE, VERSION_NAME, VERSION_CODE and METADATA_FILE parameters
+          # writeMetadata.js file needs BUILD_DATE, APP_VERSION_NAME_DASH, VERSION_CODE and METADATA_FILE parameters
           node ./.github/workflows/scripts/writeMetadata.js
-          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME }}/releases/${{ env.VERSION_NAME }}/alpha/
+          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME }}/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
           gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
           gsutil cp -n ${{ env.PATH_TO_AAB_RELEASE }}/*.aab $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
