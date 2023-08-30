@@ -116,7 +116,7 @@ jobs:
       - name: Rename APK & AAB files
         run: |
           mv ${{ env.PATH_TO_APK_RELEASE }}/*.apk ${{ env.PATH_TO_APK_RELEASE }}/${{ env.APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.apk
-          mv ${{ env.PATH_TO_APK_RELEASE }}/*.aab ${{ env.PATH_TO_APK_RELEASE }}/${{ env.APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
+          mv ${{ env.PATH_TO_AAB_RELEASE }}/*.aab ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
 
       ##############################################################################################
       #     UPLOAD FILES
