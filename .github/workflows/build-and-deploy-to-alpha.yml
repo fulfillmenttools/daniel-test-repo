@@ -113,11 +113,10 @@ jobs:
       #     RENAME FILES
       ##############################################################################################
 
-      # TODO
-      - name: Rename files
+      - name: Rename APK & AAB files
         run: |
-          mv ${{ env.PATH_TO_APK_RELEASE }}/*.apk ${{ env.PATH_TO_APK_RELEASE }}/${{ env.APP_NAME }}_release.apk
-      #       mv oldname newname
+          mv ${{ env.PATH_TO_APK_RELEASE }}/*.apk ${{ env.PATH_TO_APK_RELEASE }}/${{ env.APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.apk
+          mv ${{ env.PATH_TO_APK_RELEASE }}/*.aab ${{ env.PATH_TO_APK_RELEASE }}/${{ env.APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
 
       ##############################################################################################
       #     UPLOAD FILES
@@ -149,8 +148,8 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           packageName: com.ocfulfillment.fulfillmentapp
-          releaseFiles: ./app/build/outputs/bundle/release/fft_${{ env.APP_VERSION }}_${{ env.BRANCH_TYPE }}-release.aab
-          releaseName: fulfillmenttools ${{ fromJson(steps.version.outputs.content).versionCode }} (${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }})
+          releaseFiles: ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
+          releaseName: fulfillmenttools - Operations (${{ env.APP_VERSION_NAME_DOTS }})
           track: alpha
           status: completed
           mappingFile: ./app/build/outputs/mapping/release/mapping.txt
