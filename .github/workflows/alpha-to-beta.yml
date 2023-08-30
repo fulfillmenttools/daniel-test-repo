@@ -8,7 +8,6 @@ on:
         required: true
 
 env:
-  APP_GCS_FOLDER: hubis-app
   APP_NAME: Hubis App
   APP_NAME_FOLDER: hubis-app
   PACKAGE_NAME: com.ocfulfillment.fulfillmentapp
@@ -29,6 +28,9 @@ jobs:
         run:
           echo "APP_VERSION_NAME_DOTS="./.github/workflows/scripts/formatVersion.sh ${{ github.event.inputs.version_for_beta_channel }} >> $GITHUB_ENV
         shell: bash
+
+      - name: ECHO NAME
+        run: echo ${{ env.APP_VERSION_NAME_DOTS }}
 
       ##############################################################################################
       #     CHECK CURRENT STAGE STATUS
