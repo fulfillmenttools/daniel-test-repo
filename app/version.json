@@ -4,5 +4,5 @@
   "patch": 0,
   "versionCode": 2,
   "__COMMENT__": "Attention: Don't manipulate the 'releaseAutoIncrement' field!",
-  "releaseAutoIncrement": 33
+  "releaseAutoIncrement": 34
 }
