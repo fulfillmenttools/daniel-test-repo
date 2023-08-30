@@ -8,6 +8,7 @@ env:
   BRANCH_STARTS_WITH: refs/heads/release
   PATH_TO_VERSION_JSON: ./app
   PATH_TO_APK_RELEASE: ./app/build/outputs/apk_from_bundle/release
+  PATH_TO_AAB_RELEASE: ./app/build/outputs/bundle/release
 
 jobs:
   build:
@@ -102,6 +103,12 @@ jobs:
           prerelease: false
 
       ##############################################################################################
+      #     RENAME FILES
+      ##############################################################################################
+
+      # TODO
+
+      ##############################################################################################
       #     UPLOAD FILES
       ##############################################################################################
 
@@ -112,7 +119,7 @@ jobs:
           service_account_key: ${{ secrets.GOOGLE_BUCKET_CREDENTIALS }}
           export_default_credentials: true
 
-      - name: Upload Android APK to ALPHA stage (Google Cloud Storage)
+      - name: Upload Android APK & AAB to ALPHA stage (Google Cloud Storage)
         env:
           BUILD_DATE: ${{ steps.startUpCheck.outputs.BUILD_DATE }}
           VERSION_NAME: ${{ fromJson(steps.version.outputs.content).major }}-${{ fromJson(steps.version.outputs.content).minor }}-${{ fromJson(steps.version.outputs.content).patch }}_${{ fromJson(steps.version.outputs.content).releaseAutoIncrement }}
@@ -123,6 +130,7 @@ jobs:
           node ./.github/workflows/scripts/writeMetadata.js
           GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME }}/releases/${{ env.VERSION_NAME }}/alpha/
           gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
+          gsutil cp -n ${{ env.PATH_TO_AAB_RELEASE }}/*.aab $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
 
       # TODO - MOVE TO TOP!
