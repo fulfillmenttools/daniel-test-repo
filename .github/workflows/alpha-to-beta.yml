@@ -9,7 +9,9 @@ on:
 
 env:
   APP_GCS_FOLDER: hubis-app
-  APP_NAME: hubis-app
+  APP_NAME: Hubis App
+  APP_NAME_FOLDER: hubis-app
+  PACKAGE_NAME: com.ocfulfillment.fulfillmentapp
 
 jobs:
   build:
@@ -20,10 +22,13 @@ jobs:
       #     SETUP
       ##############################################################################################
 
-      # TODO - Validate version_for_beta_channel input!
+      #  - name: Sourcecode checkout
+      #    uses: actions/checkout@v3
 
-      - name: Sourcecode checkout
-        uses: actions/checkout@v3
+      - name: Move app from ALPHA to BETA stage (Google Cloud Storage)
+        run:
+          echo "APP_VERSION_NAME_DOTS="./.github/workflows/scripts/formatVersion.sh ${{ github.event.inputs.version_for_beta_channel }} >> $GITHUB_ENV
+        shell: bash
 
       ##############################################################################################
       #     CHECK CURRENT STAGE STATUS
@@ -37,15 +42,15 @@ jobs:
           export_default_credentials: true
 
       - name: Check that ALPHA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} alpha $APP_NAME
+        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} alpha $APP_NAME_FOLDER
         shell: bash
 
       - name: Check that no BETA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} beta $APP_NAME
+        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} beta $APP_NAME_FOLDER
         shell: bash
 
       - name: Check that no GA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga $APP_NAME
+        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga $APP_NAME_FOLDER
         shell: bash
 
       ##############################################################################################
@@ -53,20 +58,21 @@ jobs:
       ##############################################################################################
 
       - name: Move app from ALPHA to BETA stage (Google Cloud Storage)
-        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha gs://ocff-deployment-mobileapps/$APP_NAME/releases/${{ github.event.inputs.version_for_beta_channel }}/beta
+        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/beta
 
       - name: Download files from BETA stage for Play Store upload
         run: |
-          gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME/releases/${{ github.event.inputs.version_for_beta_channel }}/beta ./downloads/beta
+          mkdir downloads
+          gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/beta ./downloads
 
       # TODO - MOVE TO TOP!
       - name: Upload Android App Bundle (*.aab) to Google Play (BETA track)
         uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          packageName: com.ocfulfillment.fulfillmentapp
-          releaseFiles: ./app/build/outputs/bundle/release/fft_${{ env.APP_VERSION }}_${{ env.BRANCH_TYPE }}-release.aab
-          releaseName: fulfillmenttools ${{ fromJson(steps.version.outputs.content).versionCode }} (${{ fromJson(steps.version.outputs.content).major }}.${{ fromJson(steps.version.outputs.content).minor }}.${{ fromJson(steps.version.outputs.content).patch }})
+          packageName: ${{ env.PACKAGE_NAME }}
+          releaseFiles: ./downloads/beta/${{ env.APP_NAME_FOLDER }}_${{ github.event.inputs.version_for_beta_channel }}_release.aab
+          releaseName: ${{ env.APP_NAME }} (${{ github.event.inputs.version_for_beta_channel }})
           track: beta testing
           status: completed
-          mappingFile: ./app/build/outputs/mapping/release/mapping.txt
+          mappingFile: ./downloads/beta/mapping.txt

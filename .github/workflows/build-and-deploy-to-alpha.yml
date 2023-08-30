@@ -4,13 +4,15 @@ on:
   workflow_dispatch:
 
 env:
-  # APP_NAME -> no empty spaces or special character
-  APP_NAME: hubis-app
+  # APP_NAME_FOLDER -> no empty spaces or special character
+  APP_NAME: Hubis App
+  APP_NAME_FOLDER: hubis-app
   BRANCH_STARTS_WITH: refs/heads/release
   PATH_TO_VERSION_JSON: ./app
   PATH_TO_APK_RELEASE: ./app/build/outputs/apk_from_bundle/release
   PATH_TO_AAB_RELEASE: ./app/build/outputs/bundle/release
   PATH_TO_MAPPING_FILE: ./app/build/outputs/mapping/release
+  PACKAGE_NAME: com.ocfulfillment.fulfillmentapp
 
 jobs:
   build:
@@ -116,8 +118,8 @@ jobs:
 
       - name: Rename APK & AAB files
         run: |
-          mv ${{ env.PATH_TO_APK_RELEASE }}/*.apk ${{ env.PATH_TO_APK_RELEASE }}/${{ env.APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.apk
-          mv ${{ env.PATH_TO_AAB_RELEASE }}/*.aab ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
+          mv ${{ env.PATH_TO_APK_RELEASE }}/*.apk ${{ env.PATH_TO_APK_RELEASE }}/${{ env.APP_NAME_FOLDER }}_${{ env.APP_VERSION_NAME_DASH }}_release.apk
+          mv ${{ env.PATH_TO_AAB_RELEASE }}/*.aab ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.APP_NAME_FOLDER }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
 
       ##############################################################################################
       #     UPLOAD FILES
@@ -138,32 +140,20 @@ jobs:
         run: |
           # writeMetadata.js file needs BUILD_DATE, VERSION_NAME, VERSION_CODE and METADATA_FILE parameters
           node ./.github/workflows/scripts/writeMetadata.js
-          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME }}/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
+          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
           gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
           gsutil cp -n ${{ env.PATH_TO_AAB_RELEASE }}/*.aab $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
-
-
-
-
-      - name: Download files from ALPHA stage for Play Store upload
-        run: |
-          mkdir downloads
-          gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha ./downloads
-          cd downloads/alpha
-          ls
-      
-      
 
       # TODO - MOVE TO TOP!
       - name: Upload Android App Bundle (*.aab) to Google Play (ALPHA track)
         uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          packageName: com.ocfulfillment.fulfillmentapp
-          releaseFiles: ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
-          releaseName: fulfillmenttools - Operations (${{ env.APP_VERSION_NAME_DOTS }})
+          packageName: ${{ env.PACKAGE_NAME }}
+          releaseFiles: ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.APP_NAME_FOLDER }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
+          releaseName: ${{ env.APP_NAME }} (${{ env.APP_VERSION_NAME_DOTS }})
           track: alpha
           status: completed
           mappingFile: ${{ env.PATH_TO_MAPPING_FILE }}/mapping.txt
