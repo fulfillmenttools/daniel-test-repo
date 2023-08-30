@@ -10,6 +10,7 @@ env:
   PATH_TO_VERSION_JSON: ./app
   PATH_TO_APK_RELEASE: ./app/build/outputs/apk_from_bundle/release
   PATH_TO_AAB_RELEASE: ./app/build/outputs/bundle/release
+  PATH_TO_MAPPING_FILE: ./app/build/outputs/mapping/release
 
 jobs:
   build:
@@ -141,6 +142,18 @@ jobs:
           gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
           gsutil cp -n ${{ env.PATH_TO_AAB_RELEASE }}/*.aab $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
+          gsutil cp $METADATA_FILE $GS_PATH
+
+
+
+
+      - name: Download files from ALPHA stage for Play Store upload
+        run: |
+          gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha ./downloads/alpha
+          ls
+                
+      
+      
 
       # TODO - MOVE TO TOP!
       - name: Upload Android App Bundle (*.aab) to Google Play (ALPHA track)
@@ -152,7 +165,7 @@ jobs:
           releaseName: fulfillmenttools - Operations (${{ env.APP_VERSION_NAME_DOTS }})
           track: alpha
           status: completed
-          mappingFile: ./app/build/outputs/mapping/release/mapping.txt
+          mappingFile: ${{ env.PATH_TO_MAPPING_FILE }}/mapping.txt
 
           ##############################################################################################
           #     SLACK NOTIFICATIONS
