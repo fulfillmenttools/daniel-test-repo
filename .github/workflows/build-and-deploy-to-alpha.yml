@@ -151,8 +151,7 @@ jobs:
         run: |
           mkdir downloads
           gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha ./downloads
-          ls
-          cd downloads
+          cd downloads/alpha
           ls
       
       
