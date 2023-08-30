@@ -28,9 +28,6 @@ jobs:
         run: echo "APP_VERSION_NAME_DOTS=$(./.github/workflows/scripts/formatVersion.sh ${{ github.event.inputs.version_for_beta_channel }})" >> $GITHUB_ENV
         shell: bash
 
-      - name: ECHO NAME
-        run: echo ${{ env.APP_VERSION_NAME_DOTS }}
-
       ##############################################################################################
       #     CHECK CURRENT STAGE STATUS
       ##############################################################################################
@@ -61,13 +58,13 @@ jobs:
       - name: Move app from ALPHA to BETA stage (Google Cloud Storage)
         run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/beta
 
-      - name: Download files from BETA stage for Play Store upload
+      - name: Download files from BETA stage for Google Play Store upload
         run: |
           mkdir downloads
           gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/beta ./downloads
 
       # TODO - MOVE TO TOP!
-      - name: Upload Android App Bundle (*.aab) to Google Play (BETA track)
+      - name: Upload Android App Bundle (*.aab) to Google Play Store (BETA track)
         uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
