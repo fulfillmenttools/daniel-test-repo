@@ -3,7 +3,8 @@ set -Eeuo pipefail
 
 input="${1}"
 
-semVer="$(echo "${input}" | cut -d'-' -f1-3)"
-suffix="$(echo "${input}" | cut -d'-' -f4)"
+onlyVersion="$(echo "${input}" | cut -d'_' -f2)"
+semVer="$(echo "${onlyVersion}" | cut -d'-' -f1-3)"
+suffix="$(echo "${onlyVersion}" | cut -d'-' -f4)"
 
 echo "${semVer//-/.}-${suffix}"
