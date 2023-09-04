@@ -64,7 +64,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release edit "${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}" --title="Release ${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} [BETA]" --prerelease=true
+          gh release edit "${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}" --title="${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} [BETA]" --prerelease=true
 
       ##############################################################################################
       #     MOVE FROM ALPHA TO BETA STAGE
