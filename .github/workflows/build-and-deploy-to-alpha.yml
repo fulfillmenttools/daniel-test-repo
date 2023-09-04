@@ -136,7 +136,7 @@ jobs:
 
       - name: Upload Android APK & AAB to ALPHA stage (Google Cloud Storage)
         env:
-          VERSION_NAME: ${{ env.APP_VERSION_NAME_DASH }}
+          VERSION_NAME: ${{ env.APP_VERSION_NAME_DOTS }}
           VERSION_CODE: ${{ fromJson(steps.version.outputs.content).versionCode }}
           METADATA_FILE: metadata.json
         run: |
