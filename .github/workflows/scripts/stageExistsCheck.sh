@@ -4,7 +4,7 @@ set -Eeuo pipefail
 appVersion="${1}"
 stage="${2}"
 appBucketFolderName="${3}"
-releaseBucketUrl="gs://ocff-deployment-mobileapps/${appBucketFolderName}/releases/${appVersion}"
+releaseBucketUrl="gs://ocff-deployment-mobileapps/${appBucketFolderName}/android/releases/${appVersion}"
 
 rawLs="$(gcloud storage ls "${releaseBucketUrl}")"
 alphaUrl=$(echo "${rawLs}" | grep "/${stage}" || echo "NOT_EXISTS")
