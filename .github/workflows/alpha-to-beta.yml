@@ -8,8 +8,12 @@ on:
         required: true
 
 env:
+  # APP_NAME_FOLDER -> no empty spaces or special character
+  # VERSION_PREFIX -> can be empty or must end with underscore
   APP_NAME: Hubis App
   APP_NAME_FOLDER: hubis-app
+  VERSION_PREFIX:
+  VERSION_POSTFIX: _beta
   PACKAGE_NAME: com.ocfulfillment.fulfillmentapp
 
 jobs:
@@ -50,6 +54,16 @@ jobs:
       - name: Check that no GA stage is set (Google Cloud Storage)
         run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga $APP_NAME_FOLDER
         shell: bash
+
+
+
+
+      - name: Rename GitHub Release & Tag
+        run: |
+          gh release edit ${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} --title="TEST [BETA]" --prerelease=true --tag=3.0.0
+
+
+
 
       ##############################################################################################
       #     MOVE FROM ALPHA TO BETA STAGE
