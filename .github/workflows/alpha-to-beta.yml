@@ -59,6 +59,8 @@ jobs:
 
 
       - name: Rename GitHub Release & Tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release edit ${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} --title="TEST [BETA]" --prerelease=true --tag=3.0.0
 
