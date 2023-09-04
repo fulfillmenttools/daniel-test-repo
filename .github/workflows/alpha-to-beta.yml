@@ -55,17 +55,16 @@ jobs:
         run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga $APP_NAME_FOLDER
         shell: bash
 
-
-
+      ##############################################################################################
+      #     GIT TAG HANDLING
+      ##############################################################################################
+      # TODO - MOVE TO BOTTOM UNDER "MOVE FROM ALPHA TO BETA STAGE"!
 
       - name: Rename GitHub Release & Tag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release edit ${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} --title="TEST [BETA]" --prerelease=true --tag=3.0.0
-
-
-
+          gh release edit "${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}" --title="Release ${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} [BETA]" --prerelease=true
 
       ##############################################################################################
       #     MOVE FROM ALPHA TO BETA STAGE
