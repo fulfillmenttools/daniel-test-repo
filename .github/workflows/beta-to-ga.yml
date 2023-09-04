@@ -9,10 +9,10 @@ on:
 
 env:
   # APP_NAME_FOLDER -> no empty spaces or special character
-  # VERSION_PREFIX -> can be empty or must end with underscore
+  # TAG_PREFIX -> can be empty or must end with underscore
   APP_NAME: Hubis App
   APP_NAME_FOLDER: hubis-app
-  VERSION_PREFIX:
+  TAG_PREFIX:
   PACKAGE_NAME: com.ocfulfillment.fulfillmentapp
 
 jobs:
@@ -63,19 +63,19 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release edit "${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}" --title="${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}" --prerelease=false
+          gh release edit "${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}" --title="${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}" --prerelease=false --latest=true
 
       ##############################################################################################
       #     MOVE FROM BETA TO GA STAGE
       ##############################################################################################
 
       - name: Move app from BETA to GA stage (Google Cloud Storage)
-        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/beta gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/ga
+        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/android/releases/${{ github.event.inputs.version_for_beta_channel }}/beta gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/android/releases/${{ github.event.inputs.version_for_beta_channel }}/ga
 
       - name: Download files from GA stage for Google Play Store upload
         run: |
           mkdir downloads
-          gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/ga ./downloads
+          gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/android/releases/${{ github.event.inputs.version_for_beta_channel }}/ga ./downloads
 
       - name: Upload Android App Bundle (*.aab) to Google Play Store (GA track)
         uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9

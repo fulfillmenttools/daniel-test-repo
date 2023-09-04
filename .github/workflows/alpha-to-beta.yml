@@ -9,11 +9,10 @@ on:
 
 env:
   # APP_NAME_FOLDER -> no empty spaces or special character
-  # VERSION_PREFIX -> can be empty or must end with underscore
+  # TAG_PREFIX -> can be empty or must end with underscore
   APP_NAME: Hubis App
   APP_NAME_FOLDER: hubis-app
-  VERSION_PREFIX:
-  VERSION_POSTFIX: _beta
+  TAG_PREFIX:
   PACKAGE_NAME: com.ocfulfillment.fulfillmentapp
 
 jobs:
@@ -64,19 +63,19 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release edit "${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}" --title="${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} [BETA]" --prerelease=true
+          gh release edit "${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}" --title="${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} [BETA]" --prerelease=true
 
       ##############################################################################################
       #     MOVE FROM ALPHA TO BETA STAGE
       ##############################################################################################
 
       - name: Move app from ALPHA to BETA stage (Google Cloud Storage)
-        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/beta
+        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/android/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/android/releases/${{ github.event.inputs.version_for_beta_channel }}/beta
 
       - name: Download files from BETA stage for Google Play Store upload
         run: |
           mkdir downloads
-          gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/releases/${{ github.event.inputs.version_for_beta_channel }}/beta ./downloads
+          gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/android/releases/${{ github.event.inputs.version_for_beta_channel }}/beta ./downloads
 
       # TODO - MOVE TO TOP!
       - name: Upload Android App Bundle (*.aab) to Google Play Store (BETA track)

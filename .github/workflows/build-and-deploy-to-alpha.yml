@@ -5,10 +5,10 @@ on:
 
 env:
   # APP_NAME_FOLDER -> no empty spaces or special character
-  # VERSION_PREFIX -> can be empty or must end with underscore
+  # TAG_PREFIX -> can be empty or must end with underscore
   APP_NAME: Hubis App
   APP_NAME_FOLDER: hubis-app
-  VERSION_PREFIX:
+  TAG_PREFIX:
   BRANCH_STARTS_WITH: refs/heads/release
   PATH_TO_VERSION_JSON: ./app
   PATH_TO_APK_RELEASE: ./app/build/outputs/apk_from_bundle/release
@@ -104,13 +104,13 @@ jobs:
       #     GIT TAG HANDLING
       ##############################################################################################
 
-      - name: Create GitHub release ${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}
+      - name: Create GitHub release ${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} [ALPHA]
-          tag_name: ${{ env.VERSION_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}
+          name: ${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} [ALPHA]
+          tag_name: ${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}
           draft: false
           prerelease: true
 
@@ -142,7 +142,7 @@ jobs:
         run: |
           # writeMetadata.js file needs BUILD_DATE, VERSION_NAME, VERSION_CODE and METADATA_FILE parameters
           node ./.github/workflows/scripts/writeMetadata.js
-          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
+          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
           gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
           gsutil cp -n ${{ env.PATH_TO_AAB_RELEASE }}/*.aab $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
