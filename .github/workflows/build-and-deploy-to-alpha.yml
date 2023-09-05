@@ -104,14 +104,12 @@ jobs:
       #     GIT TAG HANDLING
       ##############################################################################################
 
-      - name: Sourcecode checkout
-        uses: actions/checkout@v3
-
       - name: Create GitHub release ${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          target_commitish: ${ GITHUB_HEAD_REF }
           name: ${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} [ALPHA]
           tag_name: ${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}
           draft: false
