@@ -142,6 +142,9 @@ jobs:
           service_account_key: ${{ secrets.GOOGLE_BUCKET_CREDENTIALS }}
           export_default_credentials: true
 
+      - name: Upload Application to Google Artifact Registry
+        run: bash ./gradlew publishDanielPublicationToMavenRepository --stacktrace
+
       - name: Upload Android APK & AAB to ALPHA stage (Google Cloud Storage)
         env:
           VERSION_NAME: ${{ env.APP_VERSION_NAME_DOTS }}
@@ -179,7 +182,7 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
-          SLACK_TITLE: ${{ env.APP_NAME_FOLDER }} release build (failure)
+          SLACK_TITLE: ${{ env.APP_NAME }} release build (failure)
           SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a test.\n\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:"
           SLACK_COLOR: "#B00020"
 
@@ -190,6 +193,6 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
-          SLACK_TITLE: ${{ env.APP_NAME_FOLDER }} release build (success)
+          SLACK_TITLE: ${{ env.APP_NAME }} release build (success)
           SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a test.\n\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:"
           SLACK_COLOR: "#228F2C"

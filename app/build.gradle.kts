@@ -101,8 +101,8 @@ publishing {
 
     repositories {
         maven {
-            url = uri("${project.buildDir}/repo")
-            // url = uri("artifactregistry://europe-west1-maven.pkg.dev/ocff-blackorca-git/test-artifact")
+            //url = uri("${project.buildDir}/repo")
+            url = uri("artifactregistry://europe-west1-maven.pkg.dev/ocff-infra-app-artifacts-prd/android-registry")
         }
     }
 }
