@@ -179,7 +179,7 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
-          SLACK_TITLE: ${{ APP_NAME }} release build (failure)
+          SLACK_TITLE: ${{ env.APP_NAME_FOLDER }} release build (failure)
           SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a test.\n\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:"
           SLACK_COLOR: "#B00020"
 
@@ -190,6 +190,6 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
-          SLACK_TITLE: ${{ APP_NAME }} release build (success)
+          SLACK_TITLE: ${{ env.APP_NAME_FOLDER }} release build (success)
           SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a test.\n\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:"
           SLACK_COLOR: "#228F2C"
