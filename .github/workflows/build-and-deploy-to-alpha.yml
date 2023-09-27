@@ -62,11 +62,16 @@ jobs:
       - name: Increment 'versionCode' and 'releaseAutoIncrement' JSON value
         run: |
           cat $PATH_TO_VERSION_JSON/version.json | jq '.versionCode = .versionCode + 1' | tee $PATH_TO_VERSION_JSON/version.json
-          cat $PATH_TO_VERSION_JSON/version.json | jq '.releaseAutoIncrement = .releaseAutoIncrement + 1' | tee $PATH_TO_VERSION_JSON/version.json
           git config user.name "GitHub Actions Bot"
           git config user.email "<none>"
           git add $PATH_TO_VERSION_JSON/version.json
-          git commit -m "Increment 'releaseAutoIncrement' value in 'version.json'."
+
+          cat $PATH_TO_VERSION_JSON/version.json | jq '.releaseAutoIncrement = .releaseAutoIncrement + 1' | tee $PATH_TO_VERSION_JSON/version.json
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<none>"
+          git add $PATH_TO_VERSION_JSON/version.json          
+
+          git commit -m "Increment 'versionCode' and 'releaseAutoIncrement' value in 'version.json'."
           git push
 
       - name: Read version from JSON
