@@ -86,10 +86,11 @@ publishing {
                 android.applicationVariants.all {
                     this.outputs.forEach { output ->
                         if (output.name == "release") {
-                            artifact("$buildDir/outputs/apk_from_bundle/release/app-release-universal-unsigned.apk") {
+                            val fileName: String = System.getenv("APP_NAME_FOLDER") + "_" + System.getenv("APP_VERSION_NAME_DASH") + "_release"
+                            artifact("$buildDir/outputs/apk_from_bundle/release/$fileName.apk") {
                                 extension = "apk"
                             }
-                            artifact("$buildDir/outputs/bundle/release/app-release.aab") {
+                            artifact("$buildDir/outputs/bundle/release/$fileName.aab") {
                                 extension = "aab"
                             }
                         }
