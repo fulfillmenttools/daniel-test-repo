@@ -179,8 +179,8 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
-          SLACK_TITLE: "Android test build (failure)"
-          SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a testfulfillmentapp|go to Google Play Store> (if you are an alpha tester).\n\n:star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star:"
+          SLACK_TITLE: ${{ APP_NAME }} release build (failure)
+          SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a test.\n\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:"
           SLACK_COLOR: "#B00020"
 
       # Send optional Slack notification (success)
@@ -190,6 +190,6 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
-          SLACK_TITLE: "Android test build (success)"
-          SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a testfulfillmentapp|go to Google Play Store> (if you are an alpha tester).\n\n:star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star:"
+          SLACK_TITLE: ${{ APP_NAME }} release build (success)
+          SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a test.\n\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:"
           SLACK_COLOR: "#228F2C"
