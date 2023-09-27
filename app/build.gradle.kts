@@ -54,6 +54,7 @@ android {
 }
 
 dependencies {
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("androidx.core:core-ktx:1.10.1")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
@@ -86,11 +87,9 @@ publishing {
                     this.outputs.forEach { output ->
                         if (output.name == "release") {
                             artifact("$buildDir/outputs/apk_from_bundle/release/app-release-universal-unsigned.apk") {
-                                classifier = "device"
                                 extension = "apk"
                             }
                             artifact("$buildDir/outputs/bundle/release/app-release.aab") {
-                                classifier = "store"
                                 extension = "aab"
                             }
                         }
@@ -103,8 +102,7 @@ publishing {
     repositories {
         maven {
             url = uri("${project.buildDir}/repo")
-            //url =
-            //    uri("artifactregistry://europe-west1-maven.pkg.dev/ocff-blackorca-git/test-artifact")
+            // url = uri("artifactregistry://europe-west1-maven.pkg.dev/ocff-blackorca-git/test-artifact")
         }
     }
 }

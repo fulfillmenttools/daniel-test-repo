@@ -61,10 +61,11 @@ jobs:
 
       - name: Increment 'releaseAutoIncrement' JSON value
         run: |
+          cat $PATH_TO_VERSION_JSON/version.json | jq '.versionCode = .versionCode + 1' | tee $PATH_TO_VERSION_JSON/version.json
           cat $PATH_TO_VERSION_JSON/version.json | jq '.releaseAutoIncrement = .releaseAutoIncrement + 1' | tee $PATH_TO_VERSION_JSON/version.json
           git config user.name "GitHub Actions Bot"
           git config user.email "<none>"
-          git add ./app/version.json
+          git add $PATH_TO_VERSION_JSON/version.json
           git commit -m "Increment 'releaseAutoIncrement' value in 'version.json'."
           git push
 
@@ -144,7 +145,7 @@ jobs:
         run: |
           # writeMetadata.js file needs BUILD_DATE, VERSION_NAME, VERSION_CODE and METADATA_FILE parameters
           node ./.github/workflows/scripts/writeMetadata.js
-          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
+          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/relases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
           gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
           gsutil cp -n ${{ env.PATH_TO_AAB_RELEASE }}/*.aab $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
@@ -162,8 +163,28 @@ jobs:
           status: completed
           mappingFile: ${{ env.PATH_TO_MAPPING_FILE }}/mapping.txt
 
-          ##############################################################################################
-          #     SLACK NOTIFICATIONS
-          ##############################################################################################
+      ##############################################################################################
+      #     SLACK NOTIFICATIONS
+      ##############################################################################################
 
-      # TODO
+      # Send optional Slack notification (failure)
+      - name: Send optional Slack notification (failure)
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@12e36fc18b0689399306c2e0b3e0f2978b7f1ee7
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_ANDROID_NOTIFICATION_WEBHOOK_URL }}
+          SLACK_USERNAME: AndroidDevelopBranch
+          SLACK_TITLE: "Android test build (failure)"
+          SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a testfulfillmentapp|go to Google Play Store> (if you are an alpha tester).\n\n:star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star:"
+          SLACK_COLOR: "#B00020"
+
+      # Send optional Slack notification (success)
+      - name: Send optional Slack notification (success)
+        if: ${{ success() }}
+        uses: rtCamp/action-slack-notify@12e36fc18b0689399306c2e0b3e0f2978b7f1ee7
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_ANDROID_NOTIFICATION_WEBHOOK_URL }}
+          SLACK_USERNAME: AndroidDevelopBranch
+          SLACK_TITLE: "Android test build (success)"
+          SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a testfulfillmentapp|go to Google Play Store> (if you are an alpha tester).\n\n:star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star: :checkered_flag: :star:"
+          SLACK_COLOR: "#228F2C"
