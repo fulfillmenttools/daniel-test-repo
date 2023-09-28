@@ -2,6 +2,7 @@
 set -Eeuo pipefail
 
 input="${1}"
+separator="${2}"
 
 onlyVersion="$(echo "${input}" | cut -d'_' -f2)"
 semVer="$(echo "${onlyVersion}" | cut -d'-' -f1-3)"

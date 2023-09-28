@@ -87,10 +87,13 @@ publishing {
                     this.outputs.forEach { output ->
                         if (output.name == "release") {
                             val fileName: String = System.getenv("APP_NAME_FOLDER") + "_" + System.getenv("APP_VERSION_NAME_DASH") + "_release"
-                            artifact("$buildDir/outputs/apk_from_bundle/release/$fileName.apk") {
+                            val apkPath: String = System.getenv("APK_PATH") ?: "$buildDir/outputs/apk_from_bundle/release"
+                            val aabPath: String = System.getenv("AAB_PATH") ?: "$buildDir/outputs/bundle/release"
+
+                            artifact("$apkPath/$fileName.apk") {
                                 extension = "apk"
                             }
-                            artifact("$buildDir/outputs/bundle/release/$fileName.aab") {
+                            artifact("$aabPath/$fileName.aab") {
                                 extension = "aab"
                             }
                         }
@@ -102,7 +105,6 @@ publishing {
 
     repositories {
         maven {
-            //url = uri("${project.buildDir}/repo")
             url = uri("artifactregistry://europe-west1-maven.pkg.dev/ocff-infra-app-artifacts-prd/android-registry")
         }
     }
