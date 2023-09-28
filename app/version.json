@@ -4,6 +4,6 @@
   "patch": 0,
   "__COMMENT1__": "Attention: Don't manipulate the 'versionCode' and 'releaseAutoIncrement' fields!",
   "__COMMENT2__": "'versionCode' is only for the Google Play Store, the 'releaseAutoIncrement' is our technical version number.",
-  "versionCode": 6,
-  "releaseAutoIncrement": 50
+  "versionCode": 7,
+  "releaseAutoIncrement": 51
 }
