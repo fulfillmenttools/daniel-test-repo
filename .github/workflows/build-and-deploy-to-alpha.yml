@@ -197,10 +197,10 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
           SLACK_MESSAGE: "\n\n
-          *${{ env.APP_NAME }} release build (success)* 
-
+          *${{ env.APP_NAME }} release build (success) 2* 
+          
           New ${{ env.APP_NAME }} Android application ${{ env.APP_VERSION_NAME_DOTS }} is available in ALPHA channel.\n\n
-
+          
           You can find it here:\n
           - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
           - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha|Google Cloud Storage>\n
