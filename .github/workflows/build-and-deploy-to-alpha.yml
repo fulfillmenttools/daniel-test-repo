@@ -176,8 +176,9 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
-          SLACK_MESSAGE: "\n\n
-            *${{ env.APP_NAME }} release build (failure)* 
+          SLACK_TITLE: "${{ env.APP_NAME }} release build (success)"
+          SLACK_MESSAGE: " \n\n
+          *${{ env.APP_NAME }} release build (success) 2* 
 
             New ${{ env.APP_NAME }} Android application ${{ env.APP_VERSION_NAME_DOTS }} is available in ALPHA channel.\n\n
 
@@ -196,7 +197,8 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
-          SLACK_MESSAGE: "\n\n
+          SLACK_TITLE: "${{ env.APP_NAME }} release build (success)"
+          SLACK_MESSAGE: " \n\n
           *${{ env.APP_NAME }} release build (success) 2* 
           
           New ${{ env.APP_NAME }} Android application ${{ env.APP_VERSION_NAME_DOTS }} is available in ALPHA channel.\n\n
