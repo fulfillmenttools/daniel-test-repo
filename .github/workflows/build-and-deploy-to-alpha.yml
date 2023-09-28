@@ -21,6 +21,10 @@ env:
 jobs:
   build:
     runs-on: buildjet-8vcpu-ubuntu-2204
+    permissions:
+      id-token: write
+      contents: write
+      packages: read
 
     steps:
       ##############################################################################################
