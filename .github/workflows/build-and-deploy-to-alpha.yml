@@ -9,6 +9,7 @@ env:
   APP_NAME: Hubis App
   APP_NAME_FOLDER: hubis-app
   TAG_PREFIX: hubis-app_
+  ARTIFACT_POSTFIX: -alpha
   BRANCH_STARTS_WITH: refs/heads/release
   PATH_TO_VERSION_JSON: ./app
   PATH_TO_APK_RELEASE: ./app/build/outputs/apk_from_bundle/release
@@ -146,7 +147,7 @@ jobs:
         run: |
           # writeMetadata.js file needs BUILD_DATE, VERSION_NAME, VERSION_CODE and METADATA_FILE parameters
           node ./.github/workflows/scripts/writeMetadata.js
-          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/relases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
+          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
           gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
           gsutil cp -n ${{ env.PATH_TO_AAB_RELEASE }}/*.aab $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
@@ -176,7 +177,16 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
           SLACK_TITLE: ${{ env.APP_NAME }} release build (failure)
-          SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a test.\n\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:"
+          SLACK_MESSAGE: "\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\n
+
+          New ${{ env.APP_NAME }} Android application ${{ env.APP_VERSION_NAME_DOTS }} is available in ALPHA channel.\n\n
+
+          You can find it here:\n
+          - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
+          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/|Google Cloud Storage>
+          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.APP_NAME_FOLDER }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.ARTIFACT_POSTFIX }}?project=ocff-infra-app-artifacts-prd/|Google Artifact Registry>\n\n
+          
+          :work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n"
           SLACK_COLOR: "#B00020"
 
       # Send optional Slack notification (success)
@@ -187,5 +197,14 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
           SLACK_TITLE: ${{ env.APP_NAME }} release build (success)
-          SLACK_MESSAGE: ":work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\nHuhu, 1 Hubi here. Don't worry, this is just a test.\n\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:"
+          SLACK_MESSAGE: "\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\n
+
+          New ${{ env.APP_NAME }} Android application ${{ env.APP_VERSION_NAME_DOTS }} is available in ALPHA channel.\n\n
+
+          You can find it here:\n
+          - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
+          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/|Google Cloud Storage>
+          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.APP_NAME_FOLDER }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.ARTIFACT_POSTFIX }}?project=ocff-infra-app-artifacts-prd/|Google Artifact Registry>\n\n
+          
+          :work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n"
           SLACK_COLOR: "#228F2C"
