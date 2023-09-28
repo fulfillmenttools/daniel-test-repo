@@ -176,17 +176,17 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
-          SLACK_TITLE: ${{ env.APP_NAME }} release build (failure)
-          SLACK_MESSAGE: "\n:work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n\n
+          SLACK_MESSAGE: "\n\n
+            *${{ env.APP_NAME }} release build (failure)* 
 
-          New ${{ env.APP_NAME }} Android application ${{ env.APP_VERSION_NAME_DOTS }} is available in ALPHA channel.\n\n
+            New ${{ env.APP_NAME }} Android application ${{ env.APP_VERSION_NAME_DOTS }} is available in ALPHA channel.\n\n
 
-          You can find it here:\n
-          - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
-          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/|Google Cloud Storage>
-          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.APP_NAME_FOLDER }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.ARTIFACT_POSTFIX }}?project=ocff-infra-app-artifacts-prd/|Google Artifact Registry>\n\n
-          
-          :work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n"
+            You can find it here:\n
+            - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
+            - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha|Google Cloud Storage>\n
+            - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.APP_NAME_FOLDER }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.ARTIFACT_POSTFIX }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
+
+            :work_in_progress::work_in_progress::work_in_progress::work_in_progress:\n"
           SLACK_COLOR: "#B00020"
 
       # Send optional Slack notification (success)
