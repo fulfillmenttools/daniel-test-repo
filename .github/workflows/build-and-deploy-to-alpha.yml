@@ -129,7 +129,7 @@ jobs:
           mv ${{ env.PATH_TO_AAB_RELEASE }}/*.aab ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
 
       ##############################################################################################
-      #     UPLOAD FILES
+      #     AUTHENTICATE TO GOOGLE CLOUD
       ##############################################################################################
 
       - id: google-auth
@@ -144,6 +144,10 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
         with:
           skip_install: true
+
+      ##############################################################################################
+      #     UPLOAD FILES
+      ##############################################################################################
 
       - name: Upload Application to Google Artifact Registry
         run: bash ./gradlew publishDanielPublicationToMavenRepository --stacktrace
@@ -186,7 +190,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
           MSG_MINIMAL: actions url,commit
-          SLACK_MESSAGE: "New *${{ env.APP_NAME }}* Android application with version *${{ env.APP_VERSION_NAME_DOTS }}* is available in ALPHA channel.\n\n
+          SLACK_MESSAGE: "New *${{ env.APP_NAME }}* Android application with version *${{ env.APP_VERSION_NAME_DOTS }}* is available on ALPHA stage.\n\n
 
           You want to test it, we know! You find it here:\n
           - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
@@ -204,7 +208,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
           MSG_MINIMAL: actions url,commit
-          SLACK_MESSAGE: "New *${{ env.APP_NAME }}* Android application with version *${{ env.APP_VERSION_NAME_DOTS }}* is available in ALPHA channel.\n\n
+          SLACK_MESSAGE: "New *${{ env.APP_NAME }}* Android application with version *${{ env.APP_VERSION_NAME_DOTS }}* is available on ALPHA stage.\n\n
 
                     You want to test it, we know! You find it here:\n
                     - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n

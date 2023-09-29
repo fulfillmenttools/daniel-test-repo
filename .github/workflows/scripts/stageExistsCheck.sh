@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+# EXAMPLE: stageExistsCheck.sh 1-7-0-29 alpha inventoryapp
+
 appVersion="${1}"
 stage="${2}"
-appBucketFolderName="${3}"
-releaseBucketUrl="gs://ocff-deployment-mobileapps/${appBucketFolderName}/android/releases/${appVersion}"
+packageAppName="${3}"
+releaseBucketUrl="gs://ocff-deployment-mobileapps/${packageAppName}/android/releases/${appVersion}-${stage}"
 
 rawLs="$(gcloud storage ls "${releaseBucketUrl}")"
-alphaUrl=$(echo "${rawLs}" | grep "/${stage}" || echo "NOT_EXISTS")
+stageExists=$(echo "${rawLs}" | grep "/${appVersion}-${stage}" || echo "NOT_EXISTS")
 
-if [[ "${alphaUrl}" == "NOT_EXISTS" ]]; then
+if [[ "${stageExists}" == "NOT_EXISTS" ]]; then
   echo "No application in ${stage} stage found in ${releaseBucketUrl}"
   echo "DEBUG - ls content: ${rawLs}"
   exit 1

@@ -18,6 +18,10 @@ env:
 jobs:
   build:
     runs-on: buildjet-8vcpu-ubuntu-2204
+    permissions:
+      id-token: write
+      contents: write
+      packages: read
 
     steps:
       ##############################################################################################
@@ -33,18 +37,29 @@ jobs:
           echo "APP_VERSION_NAME_DASH=${{ github.event.inputs.version_for_beta_channel }}" >> $GITHUB_ENV
         shell: bash
 
-      - name: OUTPUT
-        run: |
-          echo ${{ env.APP_VERSION_NAME_DOTS }}
-          echo ${{ env.APP_VERSION_NAME_DASH }}
+      ##############################################################################################
+      #     AUTHENTICATE TO GOOGLE CLOUD
+      ##############################################################################################
+
+      - id: google-auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          create_credentials_file: 'true'
+          workload_identity_provider: projects/716153011929/locations/global/workloadIdentityPools/github-access-pool/providers/gh-provider
+          service_account: google-artifact-access@ocff-infra-app-artifacts-prd.iam.gserviceaccount.com
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          skip_install: true
 
       ##############################################################################################
       #     CHECK CURRENT STAGE STATUS
       ##############################################################################################
 
-
       - name: Check that ALPHA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} alpha $PACKAGE_APP_NAME
+        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ env.APP_VERSION_NAME_DASH }} alpha $PACKAGE_APP_NAME
         shell: bash
 
       - name: Check that no BETA stage is set (Google Cloud Storage)
