@@ -112,3 +112,8 @@ publishing {
         }
     }
 }
+
+
+/home/runner/actions-runner/_work/daniel-test-repo/daniel-test-repo/app/build
+/home/runner/actions-runner/_work/daniel-test-repo/daniel-test-repo/app/downloads/hubisapp_1-7-0-69_release.apk
+

@@ -101,8 +101,8 @@ jobs:
 
       - name: Set environment variables for Google Artifact Registry upload
         run: |
-          echo "APK_PATH=./downloads" >> $GITHUB_ENV
-          echo "AAB_PATH=./downloads" >> $GITHUB_ENV
+          echo "APK_PATH=./../downloads" >> $GITHUB_ENV
+          echo "AAB_PATH=./../downloads" >> $GITHUB_ENV
         shell: bash
 
       - name: Upload Application to Google Artifact Registry
