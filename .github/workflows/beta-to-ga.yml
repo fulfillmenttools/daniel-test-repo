@@ -41,15 +41,15 @@ jobs:
           export_default_credentials: true
 
       - name: Check that ALPHA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} alpha $PACKAGE_APP_NAME
+        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} alpha ${{ env.PACKAGE_APP_NAME }}
         shell: bash
 
       - name: Check that BETA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} beta $PACKAGE_APP_NAME
+        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} beta ${{ env.PACKAGE_APP_NAME }}
         shell: bash
 
       - name: Check that no GA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga $PACKAGE_APP_NAME
+        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga ${{ env.PACKAGE_APP_NAME }}
         shell: bash
 
       ##############################################################################################
