@@ -8,12 +8,12 @@ on:
         required: true
 
 env:
-  # APP_NAME_FOLDER -> no empty spaces or special character
+  # PACKAGE_APP_NAME -> no empty spaces or special character
   # TAG_PREFIX -> can be empty or must end with underscore
   APP_NAME: Hubis App
-  APP_NAME_FOLDER: hubis-app
+  PACKAGE_APP_NAME: hubisapp
+  PACKAGE_ROOT_NAME: com.ocfulfillment.fulfillmentapp
   TAG_PREFIX: hubis-app_
-  PACKAGE_NAME: com.ocfulfillment.fulfillmentapp
 
 jobs:
   build:
@@ -43,15 +43,15 @@ jobs:
           export_default_credentials: true
 
       - name: Check that ALPHA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} alpha $APP_NAME_FOLDER
+        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} alpha $PACKAGE_APP_NAME
         shell: bash
 
       - name: Check that BETA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} beta $APP_NAME_FOLDER
+        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} beta $PACKAGE_APP_NAME
         shell: bash
 
       - name: Check that no GA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga $APP_NAME_FOLDER
+        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga $PACKAGE_APP_NAME
         shell: bash
 
       ##############################################################################################
@@ -70,19 +70,19 @@ jobs:
       ##############################################################################################
 
       - name: Move app from BETA to GA stage (Google Cloud Storage)
-        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/android/releases/${{ github.event.inputs.version_for_beta_channel }}/beta gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/android/releases/${{ github.event.inputs.version_for_beta_channel }}/ga
+        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ github.event.inputs.version_for_beta_channel }}/beta gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ github.event.inputs.version_for_beta_channel }}/ga
 
       - name: Download files from GA stage for Google Play Store upload
         run: |
           mkdir downloads
-          gcloud storage cp -r gs://ocff-deployment-mobileapps/$APP_NAME_FOLDER/android/releases/${{ github.event.inputs.version_for_beta_channel }}/ga ./downloads
+          gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ github.event.inputs.version_for_beta_channel }}/ga ./downloads
 
       - name: Upload Android App Bundle (*.aab) to Google Play Store (GA track)
         uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          packageName: ${{ env.PACKAGE_NAME }}
-          releaseFiles: ./downloads/ga/${{ env.APP_NAME_FOLDER }}_${{ github.event.inputs.version_for_beta_channel }}_release.aab
+          packageName: ${{ env.PACKAGE_ROOT_NAME }}
+          releaseFiles: ./downloads/ga/${{ env.PACKAGE_APP_NAME }}_${{ github.event.inputs.version_for_beta_channel }}_release.aab
           releaseName: ${{ env.APP_NAME }} (${{ env.APP_VERSION_NAME_DOTS }})
           track: production
           status: completed
