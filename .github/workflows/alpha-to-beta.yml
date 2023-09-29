@@ -9,11 +9,11 @@ on:
 
 env:
   # PACKAGE_APP_NAME -> no empty spaces or special character
-  # ARTIFACT_POSTFIX -> can be empty or must start with hyphen
+  # APP_VERSION_NAME_POSTFIX -> can be empty or must start with hyphen
   APP_NAME: Hubis App
   PACKAGE_APP_NAME: hubisapp
   PACKAGE_ROOT_NAME: com.ocfulfillment
-  ARTIFACT_POSTFIX: -beta
+  APP_VERSION_NAME_POSTFIX: -beta
 
 jobs:
   build:
@@ -117,3 +117,43 @@ jobs:
           track: beta testing
           status: completed
           mappingFile: ./downloads/beta/mapping.txt
+
+      ##############################################################################################
+      #     SLACK NOTIFICATIONS
+      ##############################################################################################
+
+      # Send optional Slack notification (failure)
+      - name: Send optional Slack notification (failure)
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@12e36fc18b0689399306c2e0b3e0f2978b7f1ee7
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
+          SLACK_USERNAME: AndroidDevelopBranch
+          MSG_MINIMAL: actions url,commit
+          SLACK_MESSAGE: "*${{ env.APP_NAME }}* Android application with version *${{ env.APP_VERSION_NAME_DOTS }}* was moved from ALPHA to BETA stage.\n\n
+
+          You find it here:\n
+          - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
+          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}|Google Cloud Storage>\n
+          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/${{ env.PACKAGE_ROOT_NAME }}:${{ env.PACKAGE_APP_NAME }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.APP_VERSION_NAME_POSTFIX }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
+          
+          :yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::sunrise_over_dom_zu_kölle::yellow_heart::yellow_heart:"
+          SLACK_COLOR: "#B00020"
+
+      # Send optional Slack notification (success)
+      - name: Send optional Slack notification (success)
+        if: ${{ success() }}
+        uses: rtCamp/action-slack-notify@12e36fc18b0689399306c2e0b3e0f2978b7f1ee7
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
+          SLACK_USERNAME: AndroidDevelopBranch
+          MSG_MINIMAL: actions url,commit
+          SLACK_MESSAGE: "New *${{ env.APP_NAME }}* Android application with version *${{ env.APP_VERSION_NAME_DOTS }}* is available on ALPHA stage.\n\n
+
+                    You want to test it, we know! You find it here:\n
+                    - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
+                    - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}|Google Cloud Storage>\n
+                    - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/${{ env.PACKAGE_ROOT_NAME }}:${{ env.PACKAGE_APP_NAME }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.APP_VERSION_NAME_POSTFIX }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
+
+                    :yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::sunrise_over_dom_zu_kölle::yellow_heart::yellow_heart:"
+          SLACK_COLOR: "#228F2C"
