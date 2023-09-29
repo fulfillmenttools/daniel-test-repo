@@ -27,22 +27,21 @@ jobs:
       - name: Sourcecode checkout
         uses: actions/checkout@v3
 
-      - name: Format version from input into major.minor.patch-iterator
+      - name: Read application version in dots and dash format
         run: |
-          echo "APP_VERSION_NAME_DOTS=$(./.github/workflows/scripts/formatVersion.sh ${{ github.event.inputs.version_for_beta_channel }})" >> $GITHUB_ENV
-          echo "APP_VERSION_NAME_DASH=$(./.github/workflows/scripts/formatVersion.sh ${{ github.event.inputs.version_for_beta_channel }})" >> $GITHUB_ENV
+          echo "APP_VERSION_NAME_DOTS=$(./.github/workflows/scripts/formatVersionDashToDots.sh ${{ github.event.inputs.version_for_beta_channel }})" >> $GITHUB_ENV
+          echo "APP_VERSION_NAME_DASH=${{ github.event.inputs.version_for_beta_channel }}" >> $GITHUB_ENV
         shell: bash
+
+      - name: OUTPUT
+        run: |
+          echo ${{ env.APP_VERSION_NAME_DOTS }}
+          echo ${{ env.APP_VERSION_NAME_DASH }}
 
       ##############################################################################################
       #     CHECK CURRENT STAGE STATUS
       ##############################################################################################
 
-      - name: Get Google Cloud Platform access
-        uses: google-github-actions/setup-gcloud@v0.2.1
-        with:
-          project_id: 'ocff-infra-artifacts-v1'
-          service_account_key: ${{ secrets.GOOGLE_BUCKET_CREDENTIALS }}
-          export_default_credentials: true
 
       - name: Check that ALPHA stage is set (Google Cloud Storage)
         run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} alpha $PACKAGE_APP_NAME

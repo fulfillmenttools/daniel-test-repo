@@ -132,14 +132,6 @@ jobs:
       #     UPLOAD FILES
       ##############################################################################################
 
-      #      - name: Get Google Cloud Platform access
-      #        uses: google-github-actions/setup-gcloud@v0.2.1
-      #        with:
-      #          project_id: 'ocff-infra-artifacts-v1'
-      #          service_account_key: ${{ secrets.GOOGLE_BUCKET_CREDENTIALS }}
-      #          export_default_credentials: true
-
-
       - id: google-auth
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
@@ -152,8 +144,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
         with:
           skip_install: true
-
-
 
       - name: Upload Application to Google Artifact Registry
         run: bash ./gradlew publishDanielPublicationToMavenRepository --stacktrace
