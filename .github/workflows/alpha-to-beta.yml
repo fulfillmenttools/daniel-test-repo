@@ -97,6 +97,8 @@ jobs:
       - name: Download files from BETA stage for Google Artifact Registry and Google Play Store upload
         run: |
           mkdir downloads
+          echo MyLog
+          ls
           gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}-beta ./downloads
 
       - name: Set environment variables for Google Artifact Registry upload
