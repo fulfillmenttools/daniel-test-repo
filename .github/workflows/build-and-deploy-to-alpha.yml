@@ -4,11 +4,12 @@ on:
   workflow_dispatch:
 
 env:
-  # APP_NAME_FOLDER -> no empty spaces or special character
+  # PACKAGE_APP_NAME -> no empty spaces or special character
   # TAG_PREFIX -> can be empty or must end with underscore
   # ARTIFACT_VERSION_POSTFIX -> can be empty or must start with hyphen
   APP_NAME: Hubis App
-  APP_NAME_FOLDER: hubis-app
+  PACKAGE_APP_NAME: hubisapp
+  PACKAGE_ROOT_NAME: com.ocfulfillment.fulfillmentapp
   TAG_PREFIX: hubis-app_
   ARTIFACT_VERSION_POSTFIX: -alpha
   BRANCH_STARTS_WITH: refs/heads/release
@@ -16,7 +17,6 @@ env:
   PATH_TO_APK_RELEASE: ./app/build/outputs/apk_from_bundle/release
   PATH_TO_AAB_RELEASE: ./app/build/outputs/bundle/release
   PATH_TO_MAPPING_FILE: ./app/build/outputs/mapping/release
-  PACKAGE_NAME: com.ocfulfillment.fulfillmentapp
 
 jobs:
   build:
@@ -127,8 +127,8 @@ jobs:
 
       - name: Rename APK & AAB files
         run: |
-          mv ${{ env.PATH_TO_APK_RELEASE }}/*.apk ${{ env.PATH_TO_APK_RELEASE }}/${{ env.APP_NAME_FOLDER }}_${{ env.APP_VERSION_NAME_DASH }}_release.apk
-          mv ${{ env.PATH_TO_AAB_RELEASE }}/*.aab ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.APP_NAME_FOLDER }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
+          mv ${{ env.PATH_TO_APK_RELEASE }}/*.apk ${{ env.PATH_TO_APK_RELEASE }}/${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.apk
+          mv ${{ env.PATH_TO_AAB_RELEASE }}/*.aab ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
 
       ##############################################################################################
       #     UPLOAD FILES
@@ -168,7 +168,7 @@ jobs:
         run: |
           # writeMetadata.js file needs BUILD_DATE, VERSION_NAME, VERSION_CODE and METADATA_FILE parameters
           node ./.github/workflows/scripts/writeMetadata.js
-          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
+          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
           gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
           gsutil cp -n ${{ env.PATH_TO_AAB_RELEASE }}/*.aab $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
@@ -179,8 +179,8 @@ jobs:
         uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          packageName: ${{ env.PACKAGE_NAME }}
-          releaseFiles: ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.APP_NAME_FOLDER }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
+          packageName: ${{ env.PACKAGE_ROOT_NAME }}
+          releaseFiles: ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
           releaseName: ${{ env.APP_NAME }} (${{ env.APP_VERSION_NAME_DOTS }})
           track: alpha
           status: completed
@@ -202,8 +202,8 @@ jobs:
 
           You want to test it, we know! You find it here:\n
           - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
-          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha|Google Cloud Storage>\n
-          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.APP_NAME_FOLDER }}/${{ env.APP_VERSION_NAME_DOTS }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
+          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha|Google Cloud Storage>\n
+          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.PACKAGE_APP_NAME }}/${{ env.APP_VERSION_NAME_DOTS }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
           
           :yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::sunrise_over_dom_zu_kölle::yellow_heart::yellow_heart:"
           SLACK_COLOR: "#B00020"
@@ -220,8 +220,8 @@ jobs:
 
           You want to test it, we know! You find it here:\n
           - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
-          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha|Google Cloud Storage>\n
-          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.APP_NAME_FOLDER }}/${{ env.APP_VERSION_NAME_DOTS }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
+          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha|Google Cloud Storage>\n
+          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.PACKAGE_APP_NAME }}/${{ env.APP_VERSION_NAME_DOTS }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
           
           :yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::sunrise_over_dom_zu_kölle::yellow_heart::yellow_heart:"
           SLACK_COLOR: "#228F2C"

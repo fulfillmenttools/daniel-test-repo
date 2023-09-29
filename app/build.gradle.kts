@@ -77,16 +77,17 @@ dependencies {
 
 publishing {
     publications {
+        // Info: System-Env values are set from GitHub Actions.
         register<MavenPublication>("Daniel") {
-            groupId = "com.fulfillmenttools"
-            artifactId = "danieltestapplication"
+            groupId = System.getenv("PACKAGE_ROOT_NAME")
+            artifactId = System.getenv("PACKAGE_APP_NAME")
             version = System.getenv("APP_VERSION_NAME_DOTS") + (System.getenv("ARTIFACT_VERSION_POSTFIX") ?: "")
 
             afterEvaluate {
                 android.applicationVariants.all {
                     this.outputs.forEach { output ->
                         if (output.name == "release") {
-                            val fileName: String = System.getenv("APP_NAME_FOLDER") + "_" + System.getenv("APP_VERSION_NAME_DASH") + "_release"
+                            val fileName: String = System.getenv("PACKAGE_APP_NAME") + "_" + System.getenv("APP_VERSION_NAME_DASH") + "_release"
                             val apkPath: String = System.getenv("APK_PATH") ?: "$buildDir/outputs/apk_from_bundle/release"
                             val aabPath: String = System.getenv("AAB_PATH") ?: "$buildDir/outputs/bundle/release"
 
