@@ -5,7 +5,7 @@ on:
 
 env:
   # PACKAGE_APP_NAME -> no empty spaces or special character
-  # APP_VERSION_NAME_POSTFIX -> can be empty or must start with hyphen
+  # APP_VERSION_NAME_POSTFIX -> must start with hyphen
   APP_NAME: Hubis App
   PACKAGE_APP_NAME: hubisapp
   PACKAGE_ROOT_NAME: com.ocfulfillment

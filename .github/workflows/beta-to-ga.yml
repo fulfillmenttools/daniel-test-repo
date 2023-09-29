@@ -9,13 +9,19 @@ on:
 
 env:
   # PACKAGE_APP_NAME -> no empty spaces or special character
+  # APP_VERSION_NAME_POSTFIX -> must start with hyphen
   APP_NAME: Hubis App
   PACKAGE_APP_NAME: hubisapp
   PACKAGE_ROOT_NAME: com.ocfulfillment
+  APP_VERSION_NAME_POSTFIX: -ga
 
 jobs:
   build:
     runs-on: buildjet-8vcpu-ubuntu-2204
+    permissions:
+      id-token: write
+      contents: write
+      packages: read
 
     steps:
       ##############################################################################################
@@ -26,8 +32,15 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Format version from input into major.minor.patch-iterator
-        run: echo "APP_VERSION_NAME_DOTS=$(./.github/workflows/scripts/formatVersionDashToDots.sh ${{ github.event.inputs.version_for_beta_channel }})" >> $GITHUB_ENV
-        shell: bash
+        run: |
+          echo "APP_VERSION_NAME_DOTS=$(./.github/workflows/scripts/formatVersionDashToDots.sh ${{ github.event.inputs.version_for_beta_channel }})" >> $GITHUB_ENV
+          echo "APP_VERSION_NAME_DASH=${{ github.event.inputs.version_for_beta_channel }}" >> $GITHUB_ENV
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'adopt'
 
       ##############################################################################################
       #     CHECK CURRENT STAGE STATUS
@@ -41,15 +54,15 @@ jobs:
           export_default_credentials: true
 
       - name: Check that ALPHA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} alpha ${{ env.PACKAGE_APP_NAME }}
+        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ env.APP_VERSION_NAME_DASH }} alpha ${{ env.PACKAGE_APP_NAME }}
         shell: bash
 
       - name: Check that BETA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} beta ${{ env.PACKAGE_APP_NAME }}
+        run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ env.APP_VERSION_NAME_DASH }} beta ${{ env.PACKAGE_APP_NAME }}
         shell: bash
 
       - name: Check that no GA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga ${{ env.PACKAGE_APP_NAME }}
+        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ env.APP_VERSION_NAME_DASH }} ga ${{ env.PACKAGE_APP_NAME }}
         shell: bash
 
       ##############################################################################################
@@ -68,12 +81,20 @@ jobs:
       ##############################################################################################
 
       - name: Move app from BETA to GA stage (Google Cloud Storage)
-        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ github.event.inputs.version_for_beta_channel }}/beta gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ github.event.inputs.version_for_beta_channel }}/ga
+        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}-beta gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}
 
       - name: Download files from GA stage for Google Play Store upload
         run: |
           mkdir downloads
-          gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ github.event.inputs.version_for_beta_channel }}/ga ./downloads
+          gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }} ./downloads
+
+      - name: Set environment variables for Google Artifact Registry upload
+        run: |
+          echo "APK_PATH=./../downloads/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}" >> $GITHUB_ENV
+          echo "AAB_PATH=./../downloads/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}" >> $GITHUB_ENV
+
+      - name: Upload Application to Google Artifact Registry
+        run: bash ./gradlew publishDanielPublicationToMavenRepository --stacktrace
 
       - name: Upload Android App Bundle (*.aab) to Google Play Store (GA track)
         uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
@@ -85,3 +106,43 @@ jobs:
           track: production
           status: completed
           mappingFile: ./downloads/ga/mapping.txt
+
+      ##############################################################################################
+      #     SLACK NOTIFICATIONS
+      ##############################################################################################
+
+      # Send optional Slack notification (failure)
+      - name: Send optional Slack notification (failure)
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@12e36fc18b0689399306c2e0b3e0f2978b7f1ee7
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
+          SLACK_USERNAME: AndroidDevelopBranch
+          MSG_MINIMAL: actions url,commit
+          SLACK_MESSAGE: "*${{ env.APP_NAME }}* Android application with version *${{ env.APP_VERSION_NAME_DOTS }}* was moved from BETA to GA stage.\n\n
+
+          You find it here:\n
+          - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
+          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}|Google Cloud Storage>\n
+          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/${{ env.PACKAGE_ROOT_NAME }}:${{ env.PACKAGE_APP_NAME }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.APP_VERSION_NAME_POSTFIX }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
+          
+          :yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::sunrise_over_dom_zu_kölle::yellow_heart::yellow_heart:"
+          SLACK_COLOR: "#B00020"
+
+      # Send optional Slack notification (success)
+      - name: Send optional Slack notification (success)
+        if: ${{ success() }}
+        uses: rtCamp/action-slack-notify@12e36fc18b0689399306c2e0b3e0f2978b7f1ee7
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
+          SLACK_USERNAME: AndroidDevelopBranch
+          MSG_MINIMAL: actions url,commit
+          SLACK_MESSAGE: "*${{ env.APP_NAME }}* Android application with version *${{ env.APP_VERSION_NAME_DOTS }}* was moved from BETA to GA stage.\n\n
+
+          You find it here:\n
+          - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
+          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}|Google Cloud Storage>\n
+          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/${{ env.PACKAGE_ROOT_NAME }}:${{ env.PACKAGE_APP_NAME }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.APP_VERSION_NAME_POSTFIX }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
+          
+          :yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::sunrise_over_dom_zu_kölle::yellow_heart::yellow_heart:"
+          SLACK_COLOR: "#228F2C"

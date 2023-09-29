@@ -9,7 +9,7 @@ on:
 
 env:
   # PACKAGE_APP_NAME -> no empty spaces or special character
-  # APP_VERSION_NAME_POSTFIX -> can be empty or must start with hyphen
+  # APP_VERSION_NAME_POSTFIX -> must start with hyphen
   APP_NAME: Hubis App
   PACKAGE_APP_NAME: hubisapp
   PACKAGE_ROOT_NAME: com.ocfulfillment
@@ -35,7 +35,6 @@ jobs:
         run: |
           echo "APP_VERSION_NAME_DOTS=$(./.github/workflows/scripts/formatVersionDashToDots.sh ${{ github.event.inputs.version_for_beta_channel }})" >> $GITHUB_ENV
           echo "APP_VERSION_NAME_DASH=${{ github.event.inputs.version_for_beta_channel }}" >> $GITHUB_ENV
-        shell: bash
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -92,17 +91,17 @@ jobs:
       ##############################################################################################
 
       - name: Move app from ALPHA to BETA stage (Google Cloud Storage)
-        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}-alpha gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}-beta
+        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}-alpha gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}
 
       - name: Download files from BETA stage for Google Artifact Registry and Google Play Store upload
         run: |
           mkdir downloads
-          gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}-beta ./downloads
+          gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }} ./downloads
 
       - name: Set environment variables for Google Artifact Registry upload
         run: |
-          echo "APK_PATH=./../downloads/${{ env.APP_VERSION_NAME_DASH }}-beta" >> $GITHUB_ENV
-          echo "AAB_PATH=./../downloads/${{ env.APP_VERSION_NAME_DASH }}-beta" >> $GITHUB_ENV
+          echo "APK_PATH=./../downloads/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}" >> $GITHUB_ENV
+          echo "AAB_PATH=./../downloads/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}" >> $GITHUB_ENV
 
       - name: Upload Application to Google Artifact Registry
         run: bash ./gradlew publishDanielPublicationToMavenRepository --stacktrace
@@ -148,12 +147,12 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_ANDROID_ALPHA_ANIMALS }}
           SLACK_USERNAME: AndroidDevelopBranch
           MSG_MINIMAL: actions url,commit
-          SLACK_MESSAGE: "New *${{ env.APP_NAME }}* Android application with version *${{ env.APP_VERSION_NAME_DOTS }}* is available on ALPHA stage.\n\n
+          SLACK_MESSAGE: "*${{ env.APP_NAME }}* Android application with version *${{ env.APP_VERSION_NAME_DOTS }}* was moved from ALPHA to BETA stage.\n\n
 
-                    You want to test it, we know! You find it here:\n
-                    - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
-                    - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}|Google Cloud Storage>\n
-                    - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/${{ env.PACKAGE_ROOT_NAME }}:${{ env.PACKAGE_APP_NAME }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.APP_VERSION_NAME_POSTFIX }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
-
-                    :yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::sunrise_over_dom_zu_kölle::yellow_heart::yellow_heart:"
+          You find it here:\n
+          - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
+          - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}|Google Cloud Storage>\n
+          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/${{ env.PACKAGE_ROOT_NAME }}:${{ env.PACKAGE_APP_NAME }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.APP_VERSION_NAME_POSTFIX }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
+          
+          :yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::sunrise_over_dom_zu_kölle::yellow_heart::yellow_heart:"
           SLACK_COLOR: "#228F2C"
