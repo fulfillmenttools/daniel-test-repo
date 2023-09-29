@@ -63,11 +63,11 @@ jobs:
         shell: bash
 
       - name: Check that no BETA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} beta $PACKAGE_APP_NAME
+        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ env.APP_VERSION_NAME_DASH }} beta $PACKAGE_APP_NAME
         shell: bash
 
       - name: Check that no GA stage is set (Google Cloud Storage)
-        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ github.event.inputs.version_for_beta_channel }} ga $PACKAGE_APP_NAME
+        run: ./.github/workflows/scripts/stageDoesntExistsCheck.sh ${{ env.APP_VERSION_NAME_DASH }} ga $PACKAGE_APP_NAME
         shell: bash
 
       ##############################################################################################
