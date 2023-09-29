@@ -101,11 +101,8 @@ jobs:
 
       - name: Set environment variables for Google Artifact Registry upload
         run: |
-          echo "APK_PATH=./../downloads" >> $GITHUB_ENV
-          echo "AAB_PATH=./../downloads" >> $GITHUB_ENV
-          echo MyLog
-          cd downloads
-          ls
+          echo "APK_PATH=./../downloads/${{ env.APP_VERSION_NAME_DASH }}-beta" >> $GITHUB_ENV
+          echo "AAB_PATH=./../downloads/${{ env.APP_VERSION_NAME_DASH }}-beta" >> $GITHUB_ENV
 
       - name: Upload Application to Google Artifact Registry
         run: bash ./gradlew publishDanielPublicationToMavenRepository --stacktrace
