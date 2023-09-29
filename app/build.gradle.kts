@@ -79,7 +79,7 @@ publishing {
     publications {
         register<MavenPublication>("Daniel") {
             groupId = "com.fulfillmenttools"
-            artifactId = "danieltestapplication" + System.getenv("ARTIFACT_POSTFIX")
+            artifactId = "danieltestapplication"
             version = System.getenv("APP_VERSION_NAME_DOTS") + (System.getenv("ARTIFACT_VERSION_POSTFIX") ?: "")
 
             afterEvaluate {
