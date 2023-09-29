@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# EXAMPLE: stageExistsCheck.sh 1-7-0-29 alpha inventoryapp
+# EXAMPLE: stageExistsCheck.sh 1-7-0-29 alpha appname
 
 appVersion="${1}"
 stage="${2}"
