@@ -5,12 +5,10 @@ on:
 
 env:
   # PACKAGE_APP_NAME -> no empty spaces or special character
-  # TAG_PREFIX -> can be empty or must end with underscore
   # APP_VERSION_NAME_POSTFIX -> can be empty or must start with hyphen
   APP_NAME: Hubis App
   PACKAGE_APP_NAME: hubisapp
   PACKAGE_ROOT_NAME: com.ocfulfillment
-  TAG_PREFIX: hubis-app_
   APP_VERSION_NAME_POSTFIX: -alpha
   BRANCH_STARTS_WITH: refs/heads/release
   PATH_TO_VERSION_JSON: ./app
@@ -110,14 +108,14 @@ jobs:
       #     GIT TAG HANDLING
       ##############################################################################################
 
-      - name: Create GitHub release ${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}
+      - name: Create GitHub release ${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DOTS }}
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           target_commitish: ${{ env.BRANCH_NAME }}
-          name: ${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} [ALPHA]
-          tag_name: ${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}
+          name: ${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DOTS }} [ALPHA]
+          tag_name: ${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DOTS }}
           draft: false
           prerelease: true
 

@@ -9,12 +9,10 @@ on:
 
 env:
   # PACKAGE_APP_NAME -> no empty spaces or special character
-  # TAG_PREFIX -> can be empty or must end with underscore
   # ARTIFACT_POSTFIX -> can be empty or must start with hyphen
   APP_NAME: Hubis App
   PACKAGE_APP_NAME: hubisapp
   PACKAGE_ROOT_NAME: com.ocfulfillment
-  TAG_PREFIX: hubis-app_
   ARTIFACT_POSTFIX: -beta
 
 jobs:
@@ -67,7 +65,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release edit "${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }}" --title="${{ env.TAG_PREFIX }}${{ env.APP_VERSION_NAME_DOTS }} [BETA]" --prerelease=true
+          gh release edit "${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DOTS }}" --title="${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DOTS }} [BETA]" --prerelease=true
 
       ##############################################################################################
       #     MOVE FROM ALPHA TO BETA STAGE
