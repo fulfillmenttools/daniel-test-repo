@@ -6,12 +6,12 @@ on:
 env:
   # PACKAGE_APP_NAME -> no empty spaces or special character
   # TAG_PREFIX -> can be empty or must end with underscore
-  # ARTIFACT_VERSION_POSTFIX -> can be empty or must start with hyphen
+  # APP_VERSION_NAME_POSTFIX -> can be empty or must start with hyphen
   APP_NAME: Hubis App
   PACKAGE_APP_NAME: hubisapp
-  PACKAGE_ROOT_NAME: com.ocfulfillment.fulfillmentapp
+  PACKAGE_ROOT_NAME: com.ocfulfillment
   TAG_PREFIX: hubis-app_
-  ARTIFACT_VERSION_POSTFIX: -alpha
+  APP_VERSION_NAME_POSTFIX: -alpha
   BRANCH_STARTS_WITH: refs/heads/release
   PATH_TO_VERSION_JSON: ./app
   PATH_TO_APK_RELEASE: ./app/build/outputs/apk_from_bundle/release
@@ -168,7 +168,7 @@ jobs:
         run: |
           # writeMetadata.js file needs BUILD_DATE, VERSION_NAME, VERSION_CODE and METADATA_FILE parameters
           node ./.github/workflows/scripts/writeMetadata.js
-          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha/
+          GS_PATH=gs://ocff-deployment-mobileapps/${{ env.PACKAGE_APP_NAME }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}/
           gsutil cp -n ${{ env.PATH_TO_APK_RELEASE }}/*.apk $GS_PATH
           gsutil cp -n ${{ env.PATH_TO_AAB_RELEASE }}/*.aab $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH

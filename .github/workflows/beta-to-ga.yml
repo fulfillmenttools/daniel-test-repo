@@ -12,7 +12,7 @@ env:
   # TAG_PREFIX -> can be empty or must end with underscore
   APP_NAME: Hubis App
   PACKAGE_APP_NAME: hubisapp
-  PACKAGE_ROOT_NAME: com.ocfulfillment.fulfillmentapp
+  PACKAGE_ROOT_NAME: com.ocfulfillment
   TAG_PREFIX: hubis-app_
 
 jobs:

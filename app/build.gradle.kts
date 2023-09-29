@@ -81,7 +81,7 @@ publishing {
         register<MavenPublication>("Daniel") {
             groupId = System.getenv("PACKAGE_ROOT_NAME")
             artifactId = System.getenv("PACKAGE_APP_NAME")
-            version = System.getenv("APP_VERSION_NAME_DOTS") + (System.getenv("ARTIFACT_VERSION_POSTFIX") ?: "")
+            version = System.getenv("APP_VERSION_NAME_DOTS") + (System.getenv("APP_VERSION_NAME_POSTFIX") ?: "")
 
             afterEvaluate {
                 android.applicationVariants.all {
