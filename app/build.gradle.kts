@@ -80,7 +80,7 @@ publishing {
         register<MavenPublication>("Daniel") {
             groupId = "com.fulfillmenttools"
             artifactId = "danieltestapplication" + System.getenv("ARTIFACT_POSTFIX")
-            version = System.getenv("APP_VERSION_NAME_DOTS")
+            version = System.getenv("APP_VERSION_NAME_DOTS") + (System.getenv("ARTIFACT_VERSION_POSTFIX") ?: "")
 
             afterEvaluate {
                 android.applicationVariants.all {

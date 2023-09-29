@@ -6,11 +6,11 @@ on:
 env:
   # APP_NAME_FOLDER -> no empty spaces or special character
   # TAG_PREFIX -> can be empty or must end with underscore
-  # ARTIFACT_POSTFIX -> can be empty or must start with hyphen
+  # ARTIFACT_VERSION_POSTFIX -> can be empty or must start with hyphen
   APP_NAME: Hubis App
   APP_NAME_FOLDER: hubis-app
   TAG_PREFIX: hubis-app_
-  ARTIFACT_POSTFIX: -alpha
+  ARTIFACT_VERSION_POSTFIX: -alpha
   BRANCH_STARTS_WITH: refs/heads/release
   PATH_TO_VERSION_JSON: ./app
   PATH_TO_APK_RELEASE: ./app/build/outputs/apk_from_bundle/release
@@ -203,7 +203,7 @@ jobs:
           You want to test it, we know! You find it here:\n
           - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
           - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha|Google Cloud Storage>\n
-          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.APP_NAME_FOLDER }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.ARTIFACT_POSTFIX }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
+          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.APP_NAME_FOLDER }}/${{ env.APP_VERSION_NAME_DOTS }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
           
           :yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::sunrise_over_dom_zu_kölle::yellow_heart::yellow_heart:"
           SLACK_COLOR: "#B00020"
@@ -221,7 +221,7 @@ jobs:
           You want to test it, we know! You find it here:\n
           - <https://play.google.com/store/apps/details?id=com.ocfulfillment.inventoryapp|Google Play Store>\n
           - <https://console.cloud.google.com/storage/browser/ocff-deployment-mobileapps/${{ env.APP_NAME_FOLDER }}/android/releases/${{ env.APP_VERSION_NAME_DASH }}/alpha|Google Cloud Storage>\n
-          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.APP_NAME_FOLDER }}/${{ env.APP_VERSION_NAME_DOTS }}${{ env.ARTIFACT_POSTFIX }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
+          - <https://console.cloud.google.com/artifacts/maven/ocff-infra-app-artifacts-prd/europe-west1/android-registry/com.fulfillmenttools:${{ env.APP_NAME_FOLDER }}/${{ env.APP_VERSION_NAME_DOTS }}?project=ocff-infra-app-artifacts-prd|Google Artifact Registry>\n\n
           
           :yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::yellow_heart::sunrise_over_dom_zu_kölle::yellow_heart::yellow_heart:"
           SLACK_COLOR: "#228F2C"
