@@ -6,7 +6,7 @@ set -Eeuo pipefail
 appVersion="${1}"
 stage="${2}"
 packageAppName="${3}"
-releaseBucketUrl="gs://ocff-deployment-mobileapps/${packageAppName}/android/releases/${appVersion}-${stage}"
+releaseBucketUrl="gs://ocff-deployment-mobileapps/${packageAppName}/android/releases"
 echo $releaseBucketUrl
 rawLs="$(gcloud storage ls "${releaseBucketUrl}")"
 echo $rawLs
