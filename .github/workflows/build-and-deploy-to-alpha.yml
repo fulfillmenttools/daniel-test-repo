@@ -149,9 +149,6 @@ jobs:
       #     UPLOAD FILES
       ##############################################################################################
 
-      - name: Upload Application to Google Artifact Registry
-        run: bash ./gradlew publishDanielPublicationToMavenRepository --stacktrace
-
       - name: Upload Android APK & AAB to ALPHA stage (Google Cloud Storage)
         env:
           VERSION_NAME: ${{ env.APP_VERSION_NAME_DOTS }}
@@ -165,6 +162,9 @@ jobs:
           gsutil cp -n ${{ env.PATH_TO_AAB_RELEASE }}/*.aab $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
           gsutil cp $METADATA_FILE $GS_PATH
+
+      - name: Upload Application to Google Artifact Registry
+        run: bash ./gradlew publishDanielPublicationToMavenRepository --stacktrace
 
       # TODO - MOVE TO TOP!
       - name: Upload Android App Bundle (*.aab) to Google Play (ALPHA track)

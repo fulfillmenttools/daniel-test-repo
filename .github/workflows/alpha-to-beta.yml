@@ -86,22 +86,21 @@ jobs:
       ##############################################################################################
 
       - name: Move app from ALPHA to BETA stage (Google Cloud Storage)
-        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ github.event.inputs.version_for_beta_channel }}/alpha gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ github.event.inputs.version_for_beta_channel }}/beta
+        run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}-alpha gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}-beta
 
       - name: Download files from BETA stage for Google Artifact Registry and Google Play Store upload
         run: |
           mkdir downloads
-          gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ github.event.inputs.version_for_beta_channel }}/beta ./downloads
+          gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}-beta ./downloads
 
+      - name: Set environment variables for Google Artifact Registry upload
+        run: |
+          echo "APK_PATH=./downloads)" >> $GITHUB_ENV
+          echo "AAB_PATH=./downloads)" >> $GITHUB_ENV
+        shell: bash
 
-          echo "APK_PATH=./downloads" >> $GITHUB_ENV
-          echo "AAB_PATH=./downloads" >> $GITHUB_ENV
-
-
-
-
-
-
+      - name: Upload Application to Google Artifact Registry
+        run: bash ./gradlew publishDanielPublicationToMavenRepository --stacktrace
 
       - name: Upload Android App Bundle (*.aab) to Google Play Store (BETA track)
         uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
