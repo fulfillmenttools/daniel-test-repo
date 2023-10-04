@@ -100,7 +100,7 @@ jobs:
       - name: Move app from BETA to GA stage (Google Cloud Storage)
         run: gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}-beta gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }}
 
-      - name: Download files from GA stage for Google Play Store upload
+      - name: Download files from GA stage for Google Artifact Registry and Google Play Store upload
         run: |
           mkdir downloads
           gcloud storage cp -r gs://ocff-deployment-mobileapps/$PACKAGE_APP_NAME/android/releases/${{ env.APP_VERSION_NAME_DASH }}${{ env.APP_VERSION_NAME_POSTFIX }} ./downloads
