@@ -1,0 +1,12 @@
+{
+  "major": 1,
+  "minor": 7,
+  "patch": 0,
+  "__COMMENT1__": "Attention: Don't manipulate the 'versionCode' and 'releaseAutoIncrement' fields!",
+  "__COMMENT2__": "'versionCode' is only for the Google Play Store, the 'releaseAutoIncrement' is our technical version number.",
+  "versionCode": 25,
+  "releaseAutoIncrement": 69
+}
+
+
+TODO - Manchmal wird das hier gelöscht!
