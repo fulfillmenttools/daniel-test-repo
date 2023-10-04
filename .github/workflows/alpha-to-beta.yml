@@ -78,7 +78,7 @@ jobs:
       ##############################################################################################
       #     GIT TAG HANDLING
       ##############################################################################################
-      # TODO - MOVE TO BOTTOM UNDER "MOVE FROM ALPHA TO BETA STAGE"!
+      # TODO - MOVE TO BOTTOM UNDER "MOVE FROM BETA TO GA STAGE"!
 
       - name: Rename GitHub Release & Tag
         env:

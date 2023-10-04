@@ -91,7 +91,8 @@ publishing {
                             val apkPath: String = System.getenv("APK_PATH") ?: "$buildDir/outputs/apk_from_bundle/release"
                             val aabPath: String = System.getenv("AAB_PATH") ?: "$buildDir/outputs/bundle/release"
 
-                            println(">>> MyLog BUILD_DIR IS: $buildDir")
+                            println(">>> MyLog apkPath IS: $apkPath/$fileName.apk")
+                            println(">>> MyLog aabPath IS: $aabPath$fileName.aab")
 
                             artifact("$apkPath/$fileName.apk") {
                                 extension = "apk"
