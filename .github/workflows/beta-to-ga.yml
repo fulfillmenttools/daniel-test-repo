@@ -63,13 +63,6 @@ jobs:
       #     CHECK CURRENT STAGE STATUS
       ##############################################################################################
 
-      - name: Get Google Cloud Platform access
-        uses: google-github-actions/setup-gcloud@v0.2.1
-        with:
-          project_id: 'ocff-infra-artifacts-v1'
-          service_account_key: ${{ secrets.GOOGLE_BUCKET_CREDENTIALS }}
-          export_default_credentials: true
-
       - name: Check that ALPHA stage is set (Google Cloud Storage)
         run: ./.github/workflows/scripts/stageExistsCheck.sh ${{ env.APP_VERSION_NAME_DASH }} alpha ${{ env.PACKAGE_APP_NAME }}
         shell: bash
