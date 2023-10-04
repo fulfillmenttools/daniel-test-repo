@@ -7,14 +7,12 @@ appVersion="${1}"
 stage="${2}"
 packageAppName="${3}"
 releaseBucketUrl="gs://ocff-deployment-mobileapps/${packageAppName}/android/releases"
-
 rawLs="$(gcloud storage ls "${releaseBucketUrl}")"
 stageExists=$(echo "${rawLs}" | grep "${appVersion}-${stage}" || echo "NOT_EXISTS")
 
 if [[ "${stageExists}" == "NOT_EXISTS" ]]; then
-  echo "No application with version ${appVersion} in ${stage} stage available."
+  echo "No application ${appVersion}-${stage} found in ${releaseBucketUrl}."
 else
-  echo "Application in ${stage} stage found in ${releaseBucketUrl}"
-  echo "DEBUG - ls content: ${rawLs}"
+  echo "Application ${appVersion}-${stage} found in ${releaseBucketUrl}."
   exit 1
 fi

@@ -12,9 +12,8 @@ rawLs="$(gcloud storage ls "${releaseBucketUrl}")"
 stageExists=$(echo "${rawLs}" | grep "${appVersion}-${stage}" || echo "NOT_EXISTS")
 
 if [[ "${stageExists}" == "NOT_EXISTS" ]]; then
-  echo "No application in ${stage} stage found in ${releaseBucketUrl}"
-  echo "DEBUG - ls content: ${rawLs}"
+  echo "No application ${appVersion}-${stage} found in ${releaseBucketUrl}."
   exit 1
 else
-  echo "Application with version ${appVersion} in ${stage} stage available."
+  echo "Application ${appVersion}-${stage} found in ${releaseBucketUrl}."
 fi
