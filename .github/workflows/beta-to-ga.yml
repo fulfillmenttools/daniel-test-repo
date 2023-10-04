@@ -31,7 +31,7 @@ jobs:
       - name: Sourcecode checkout
         uses: actions/checkout@v3
 
-      - name: Format version from input into major.minor.patch-iterator
+      - name: Read application version in dots and dash format
         run: |
           echo "APP_VERSION_NAME_DOTS=$(./.github/workflows/scripts/formatVersionDashToDots.sh ${{ github.event.inputs.version_for_beta_channel }})" >> $GITHUB_ENV
           echo "APP_VERSION_NAME_DASH=${{ github.event.inputs.version_for_beta_channel }}" >> $GITHUB_ENV
@@ -41,6 +41,23 @@ jobs:
         with:
           java-version: 17
           distribution: 'adopt'
+
+      ##############################################################################################
+      #     AUTHENTICATE TO GOOGLE CLOUD
+      ##############################################################################################
+
+      - id: google-auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          create_credentials_file: 'true'
+          workload_identity_provider: projects/716153011929/locations/global/workloadIdentityPools/github-access-pool/providers/gh-provider
+          service_account: google-artifact-access@ocff-infra-app-artifacts-prd.iam.gserviceaccount.com
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          skip_install: true
 
       ##############################################################################################
       #     CHECK CURRENT STAGE STATUS
