@@ -161,16 +161,16 @@ jobs:
         run: bash ./gradlew publishDanielPublicationToMavenRepository --stacktrace
 
       # TODO - MOVE TO TOP!
-      - name: Upload Android App Bundle (*.aab) to Google Play (ALPHA track)
-        uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          packageName: ${{ env.PACKAGE_ROOT_NAME }}
-          releaseFiles: ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
-          releaseName: ${{ env.APP_NAME }} (${{ env.APP_VERSION_NAME_DOTS }})
-          track: alpha
-          status: completed
-          mappingFile: ${{ env.PATH_TO_MAPPING_FILE }}/mapping.txt
+      #- name: Upload Android App Bundle (*.aab) to Google Play (ALPHA track)
+      #  uses: r0adkll/upload-google-play@8c2ebfdb6e1b439d3a31d35772b3f0f489d688c9
+      #  with:
+      #    serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      #    packageName: ${{ env.PACKAGE_ROOT_NAME }}
+      #    releaseFiles: ${{ env.PATH_TO_AAB_RELEASE }}/${{ env.PACKAGE_APP_NAME }}_${{ env.APP_VERSION_NAME_DASH }}_release.aab
+      #    releaseName: ${{ env.APP_NAME }} (${{ env.APP_VERSION_NAME_DOTS }})
+      #    track: alpha
+      #    status: completed
+      #    mappingFile: ${{ env.PATH_TO_MAPPING_FILE }}/mapping.txt
 
       ##############################################################################################
       #     SLACK NOTIFICATIONS
