@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
 
     id("maven-publish")
-    id("com.google.cloud.artifactregistry.gradle-plugin") version "2.2.0"
+    id("com.google.cloud.artifactregistry.gradle-plugin") version "2.2.1"
 }
 
 android {
@@ -55,10 +55,10 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.1")
     implementation(platform("androidx.compose:compose-bom:2022.10.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
