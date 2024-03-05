@@ -12,6 +12,7 @@ servers:
     - url: 'https://{tenant}.api.fulfillmenttools.com'
       variables:
         tenant:
+          default: your-tenant-name
 paths:
   '/api/artifacts/{platform}':
     get:
