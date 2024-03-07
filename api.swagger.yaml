@@ -26605,11 +26605,11 @@ components:
 
   securitySchemes:
     firebase:
-      type: https
+      type: apiKey
+      in: header
+      name: Authorization
       scheme: bearer
       bearerFormat: JWT
-      name: Authorization
-      in: header
 
 tags:
   - description: >-
