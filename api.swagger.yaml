@@ -6,7 +6,7 @@ info:
     url: 'https://fulfillmenttools.com/'
   description: This is the fulfillmenttools API documentation. Visit https://docs.fulfillmenttools.com/ for first steps.
   termsOfService: 'http://swagger.io/terms/'
-  title: fulfillmenttools - simplifying retail complexity
+  title: "fulfillmenttools - simplifying retail complexity"
   version: 'VERSIONLESS'
 servers:
     - url: 'https://{tenant}.api.fulfillmenttools.com'
@@ -26614,6 +26614,22 @@ components:
       x-google-issuer: 'https://securetoken.google.com/%%PROJECT_ID%%'
       x-google-jwks_uri: >-
         https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com
+
+    exampleOauth2Flow:
+      type: oauth2
+      x-client-id: openapi                              # <--- when provided it will be pre filled in RapiDoc UI
+      x-client-secret: my-client-secret                      # <--- when provided it will be pre filled in RapiDoc UI
+      x-default-scopes: [dog-lover]                          # <--- when provided scopes will be pre checked in RapiDoc UI
+      x-receive-token-in: request-body                       # <--- can be 'header' or 'request-body' when provided this will be pre selected
+      x-receive-token-in-options: ["header", "request-body"] # <--- when provided it will limit options available
+      flows:
+        authorizationCode:
+          authorizationUrl: /authorize
+          tokenUrl: /access_token
+          scopes:
+            dog-lover: "always required"
+            owner: "optional"
+
 tags:
   - description: >-
       Everything your customer ordered in your shop, so everything he or she
