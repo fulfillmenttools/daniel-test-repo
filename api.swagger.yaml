@@ -62,6 +62,9 @@ paths:
       description: ''
       operationId: getArtifacts
       summary: Provides metadata for currently available artifacts for a platform
+      x-badges:
+        - color: orange
+          label: "BETA"
       x-google-backend:
         address: 'ocff-service://http'
         deadline: 60
