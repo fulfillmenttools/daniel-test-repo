@@ -4,7 +4,7 @@ info:
     email: api@fulfillmenttools.com
     name: fulfillmenttools
     url: 'https://fulfillmenttools.com/'
-  description: This is the fulfillmenttools API documentation. Visit https://docs.fulfillmenttools.com/ for first steps.
+  description: This is the fulfillmenttools API documentation. Visit https://docs.fulfillmenttools.com/ for first steps and https://docs.fulfillmenttools.com/api-docs/connecting-to-fulfillmenttools/restful-api/general-topics/api-release-life-cycle for our API Release Life Cycle (ALPHA, BETA, GA and DEPRECATED).
   termsOfService: 'http://swagger.io/terms/'
   title: "fulfillmenttools - simplifying retail complexity"
   version: 'VERSIONLESS'
