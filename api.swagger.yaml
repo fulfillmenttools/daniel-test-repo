@@ -292,7 +292,9 @@ paths:
       tags:
         - "DOMS - Promises"
       description: ''
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: postDeliveryPromise
       requestBody:
         content:
@@ -907,7 +909,9 @@ paths:
       tags:
         - "Fulfillment Operations - Picking"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: getCutoffTimeConfiguration
       summary: Get a tenant wide cutoff time config
       x-google-backend:
@@ -951,7 +955,9 @@ paths:
       tags:
         - "Fulfillment Operations - Picking"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: putCutoffTimeConfiguration
       requestBody:
         content:
@@ -1095,7 +1101,9 @@ paths:
         - firebase: [ ]
       tags:
         - "Infrastructure - Artifacts"
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       description: ''
       operationId: getTenantConnectorConfigurations
       summary: Get a tenant wide app connector configuration
@@ -1241,7 +1249,9 @@ paths:
       tags:
         - "Fulfillment Operations - Packing"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: getPackJobTagConfiguration
       summary: Read tag configuration for the specified section
       x-google-backend:
@@ -1337,7 +1347,9 @@ paths:
       tags:
         - "Fulfillment Operations - Shipments"
       description: ''
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: getParcelTagConfiguration
       summary: Read tag configuration for parcels
       x-google-backend:
@@ -1381,7 +1393,9 @@ paths:
       tags:
         - "Fulfillment Operations - Shipments"
       description: ''
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: putParcelTagConfiguration
       requestBody:
         content:
@@ -1435,7 +1449,9 @@ paths:
       tags:
         - "Fulfillment Operations - Handover"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: getHandoverJobTagConfiguration
       summary: Read tag configuration for handoverJobs
       x-google-backend:
@@ -1531,7 +1547,9 @@ paths:
       tags:
         - "DOMS - Orders"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: getOrderTagConfiguration
       summary: Read tag configuration for orders
       x-google-backend:
@@ -1627,7 +1645,9 @@ paths:
       tags:
         - "Infrastructure - Artifacts"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: getDomainConfiguration
       summary: Get default authentication domain of the tenant
       x-google-backend:
@@ -2098,7 +2118,9 @@ paths:
       tags:
         - "Core - Configuration"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: getLocaleConfiguration
       summary: Get the tenant wide default locale configuration
       x-google-backend:
@@ -2142,7 +2164,9 @@ paths:
       tags:
         - "Core - Configuration"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: putLocaleConfiguration
       requestBody:
         content:
@@ -2187,7 +2211,9 @@ paths:
       tags:
         - "DOMS - Routing Plans"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: getOrderRoutingConfiguration
       summary: Get the tenant wide order routing configuration
       x-google-backend:
@@ -2281,7 +2307,9 @@ paths:
         - firebase: [ ]
       tags:
         - "Infrastructure - OIDC Configuration"
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       description: 'Get the available OIDC providers.'
       operationId: getOidcProviders
       summary: 'Get the available OIDC providers.'
@@ -2332,7 +2360,9 @@ paths:
       tags:
         - "Infrastructure - OIDC Configuration"
       description: 'Create an OIDC provider.'
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: createOidcProvider
       summary: 'Create an OIDC provider.'
       x-google-backend:
@@ -2386,7 +2416,9 @@ paths:
       tags:
         - "Infrastructure - OIDC Configuration"
       description: ''
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: getOidcProvider
       summary: 'Get OIDC provider by id.'
       x-google-backend:
@@ -2443,7 +2475,9 @@ paths:
       tags:
         - "Infrastructure - OIDC Configuration"
       description: 'Update an OIDC Provider.'
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: updateOidcProvider
       summary: 'Update an OIDC Provider.'
       x-google-backend:
@@ -2491,7 +2525,9 @@ paths:
       tags:
         - "Infrastructure - OIDC Configuration"
       description: 'Delete an OIDC Provider.'
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: deleteOidcProvider
       summary: 'Delete an OIDC Provider.'
       x-google-backend:
@@ -2537,7 +2573,9 @@ paths:
       tags:
         - "Fulfillment Operations - Picking"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: getDefaultPickingTimesConfiguration
       summary: Get the current configuration for tenant wide default picking times
       x-google-backend:
@@ -2918,7 +2956,9 @@ paths:
       tags:
         - "DOMS - Routing Plans"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: getRerouteShortPickConfiguration
       summary: Get a tenant reroute short pick config
       x-google-backend:
@@ -2962,7 +3002,9 @@ paths:
       tags:
         - "DOMS - Routing Plans"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: putRerouteShortPickConfiguration
       requestBody:
         content:
@@ -3212,7 +3254,9 @@ paths:
       description: ''
       operationId: getPromisesConfiguration
       summary: Get a tenant promises config
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       x-google-backend:
         address: 'ocff-service://http'
         deadline: 60
@@ -3263,7 +3307,9 @@ paths:
         description: Desired promises configuration to put
         required: true
       summary: Change the tenant wide promises configuration
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       x-google-backend:
         address: 'ocff-service://http'
         deadline: 60
@@ -9981,7 +10027,9 @@ paths:
         - firebase: [ ]
       tags:
         - "Fulfillment Operations - Returns"
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: getReturnJobs
       parameters:
         - description: all entities after given Id
@@ -12847,7 +12895,9 @@ paths:
         - "Fulfillment Operations - Packing"
       description: >-
         Get PackingSourceContainer by ID.
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: getPackingSourceContainerById
       summary: Get a single packingSourceContainer
       x-google-backend:
@@ -12896,7 +12946,9 @@ paths:
         - "Fulfillment Operations - Packing"
       description: >-
         Creating new packingSourceContainer.
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: addPackingSourceContainer
       requestBody:
         content:
@@ -12993,7 +13045,9 @@ paths:
         - "Fulfillment Operations - Packing"
       description: >-
         Listing packingSourceContainer.
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: getPackingSourceContainers
       summary: Get all packingSourceContainers
       x-google-backend:
@@ -13349,7 +13403,9 @@ paths:
         - "Fulfillment Operations - Packing"
       description: ''
       operationId: getTargetcontainer
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       summary: Get a packing target container with the given ID on given packJob
       x-google-backend:
         address: 'ocff-service://http'
@@ -13413,7 +13469,9 @@ paths:
         - firebase: [ ]
       tags:
         - "Fulfillment Operations - Packing"
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: patchTargetcontainer
       requestBody:
         content:
@@ -13487,7 +13545,9 @@ paths:
         description: Packing Container line item object
         required: true
       summary: Add a new packing container line item
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       x-google-backend:
         address: 'ocff-service://http'
         deadline: 60
@@ -13560,7 +13620,9 @@ paths:
         - "Fulfillment Operations - Packing"
       description: 'Patch line item of a packing container'
       operationId: patchTargetContainerLineItem
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       requestBody:
         content:
           application/json:
@@ -13626,7 +13688,9 @@ paths:
         - "Fulfillment Operations - Packing"
       description: ''
       operationId: deleteLineItemTargetContainers
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       summary: deletes a lineItem of a packing container with the given ID
       x-google-backend:
         address: 'ocff-service://http'
@@ -13682,7 +13746,9 @@ paths:
         - "Fulfillment Operations - Packing"
       description: ''
       operationId: getAllTargetcontainers
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       summary: Get all packing container on given packJob
       x-google-backend:
         address: 'ocff-service://http'
@@ -13742,7 +13808,9 @@ paths:
         description: Packing Container object
         required: true
       summary: Add a new packing container
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       x-google-backend:
         address: 'ocff-service://http'
         deadline: 60
@@ -13961,7 +14029,9 @@ paths:
       tags:
         - "Core - Tags"
       description: ''
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       operationId: putTag
       requestBody:
         content:
@@ -14054,7 +14124,9 @@ paths:
       tags:
         - "Infrastructure - GraphQL"
       description: ''
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: getGraphQLPlayground
       summary: Get the GraphQL playground
       x-google-backend:
@@ -14073,7 +14145,9 @@ paths:
       tags:
         - "Infrastructure - GraphQL"
       description: ''
-      x-fft-api-lifecycle: alpha
+      x-badges:
+        - color: red
+          label: "ALPHA"
       operationId: executeGraphQLCommand
       summary: Endpoint for executing GraphQL commands
       x-google-backend:
@@ -16099,7 +16173,9 @@ components:
               $ref: '#/components/schemas/PickLineItemStatus'
             substituteLineItems:
               description: ''
-              x-fft-api-lifecycle: beta
+              x-badges:
+                - color: orange
+                  label: "BETA"
               items:
                 $ref: '#/components/schemas/SubstituteLineItem'
               type: array
@@ -17124,7 +17200,9 @@ components:
         name: NamedFile
     FixedCountConfiguration:
       description: 'Configuration of fixed count split.'
-      x-fft-api-lifecycle: beta
+      x-badges:
+        - color: orange
+          label: "BETA"
       properties:
         maxSplitCount:
           description: >-
@@ -17557,7 +17635,9 @@ components:
           type: integer
         substituteLineItems:
           description: ''
-          x-fft-api-lifecycle: beta
+          x-badges:
+            - color: orange
+              label: "BETA"
           items:
             $ref: '#/components/schemas/SubstituteLineItem'
           type: array
@@ -19573,7 +19653,9 @@ components:
               type: integer
             substituteLineItems:
               description: ''
-              x-fft-api-lifecycle: beta
+              x-badges:
+                - color: orange
+                  label: "BETA"
               items:
                 $ref: '#/components/schemas/SubstituteLineItemForCreation'
               type: array
