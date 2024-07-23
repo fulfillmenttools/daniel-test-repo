@@ -42525,11 +42525,11 @@ components:
         - version
         - initialStockQuantity
   securitySchemes:
-    firebase:
-      type: apiKey
+    http-bearer:
+      type: http
+      scheme: bearer
       in: header
       name: Authorization
-      scheme: bearer
       bearerFormat: JWT
 tags:
   - description: >-
