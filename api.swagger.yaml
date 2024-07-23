@@ -122,7 +122,7 @@ paths:
                   $ref: '#/components/schemas/ApiError'
           description: No more elements available
       security:
-        - bearerAuth: [ ]
+        - firebase: [ ]
       tags:
         - "Last Mile Integration - Carriers"
       description: ''
@@ -44183,7 +44183,7 @@ components:
         - version
         - initialStockQuantity
   securitySchemes:
-    bearerAuth:
+    firebase:
       type: http
       scheme: bearer
       bearerFormat: JWT
