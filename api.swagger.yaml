@@ -42526,10 +42526,10 @@ components:
         - initialStockQuantity
   securitySchemes:
     http-bearer:
-      type: http
-      scheme: bearer
+      type: apiKey
       in: header
       name: Authorization
+      scheme: bearer
       bearerFormat: JWT
 tags:
   - description: >-
